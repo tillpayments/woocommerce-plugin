@@ -77,7 +77,10 @@
                 'background': $seamlessCardHolderInput.css('background'),
             };
             payment = new PaymentJs("1.2");
-            payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) {
+            payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) { 
+                x = document.getElementsByClassName('payment_method_till_payments_creditcard')
+                x[1].style.background = 'transparent'
+                
                 payment.setNumberStyle(style);
                 payment.setCvvStyle(style);
                 payment.numberOn('input', function (data) {
@@ -116,6 +119,14 @@
         var reset = function () {
             $seamlessForm.hide();
         };
+
+        // add in forward slash to mm/yy
+        function onExpiryInputChange(e) {
+            if(e.target.value.length === 2){
+            document.getElementById("till_payments_seamless_expiry").value = e.target.value + "/"
+            }
+            }
+            document.getElementById("till_payments_seamless_expiry").addEventListener("input", onExpiryInputChange);
 
         var submit = function (success, error) {
             var expiryData = $seamlessExpiryInput.val().split('/');
