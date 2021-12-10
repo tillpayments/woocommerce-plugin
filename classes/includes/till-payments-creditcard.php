@@ -25,7 +25,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
     {
         $this->id = TILL_PAYMENTS_EXTENSION_UID_PREFIX . $this->id;
         $this->method_description = TILL_PAYMENTS_EXTENSION_NAME . ' ' . $this->method_title . ' payments.';
-        $this->icon = 'https://s3.ap-southeast-2.amazonaws.com/images.simplepays.io/visa_mastercard+(2).png';
+		$this->icon = 'https://s3.ap-southeast-2.amazonaws.com/images.simplepays.io/visa_mastercard+(2).png';
         $this->has_fields = isset($_GET['pay_for_order']);
 
         $this->init_form_fields();
@@ -386,7 +386,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         wp_enqueue_script('payment_js');
         wp_enqueue_script('till_payments_js_' . $this->id);
 
-        echo '<script>window.integrationKey="' . $this->get_option('integrationKey') . '";</script><style>.payment_box iframe { width: 100%!important }</style>
+        echo '<script>window.integrationKey="' . $this->get_option('integrationKey') . '";</script><style>.payment_box iframe { width: 100%!important } #till_payments_errors{color: red; }</style>
         <div id="till_payments_errors"></div>
         <div class="payment_box" style="padding: 25px; background-color: #fff; border-radius: 3px; max-width: 450px; min-height: 385px">
             <div id="till_payments_seamless">
