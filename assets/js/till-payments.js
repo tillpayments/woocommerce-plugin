@@ -1,4 +1,4 @@
-(function($){
+(function ($) {
     var $paymentForm = $('#till_payments_seamless').closest('form');
     var $paymentFormSubmitButton = $("#place_order");
     var $paymentFormTokenInput = $('#till_payments_token');
@@ -6,7 +6,7 @@
     var integrationKey = window.integrationKey;
     var initialized = false;
 
-    var init = function() {
+    var init = function () {
         if (integrationKey && !initialized) {
             $paymentFormSubmitButton.prop("disabled", false);
             tillPaymentsSeamless.init(
@@ -53,12 +53,12 @@
             _invalidCallback = invalidCallback;
             _validCallback = validCallback;
 
-            if($seamlessForm.length > 0) {
+            if ($seamlessForm.length > 0) {
                 initialized = true;
             } else {
                 return;
             }
-            
+
             $seamlessCardNumberInput.height($seamlessCardHolderInput.css('height'));
             $seamlessCvvInput.height($seamlessCardHolderInput.css('height'));
 
@@ -77,10 +77,10 @@
                 'background': $seamlessCardHolderInput.css('background'),
             };
             payment = new PaymentJs("1.2");
-            payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) { 
+            payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) {
                 x = document.getElementsByClassName('payment_method_till_payments_creditcard')
                 x[1].style.background = 'transparent'
-                
+
                 payment.setNumberStyle(style);
                 payment.setCvvStyle(style);
                 payment.numberOn('input', function (data) {
@@ -122,16 +122,15 @@
 
         // add in forward slash to mm/yy
         function onExpiryInputChange(e) {
-            if(e.target.value.length === 2){
-            document.getElementById("till_payments_seamless_expiry").value = e.target.value + "/"
+            if (e.target.value.length > 2 && !e.target.value.includes("/")) {
+                document.getElementById("till_payments_seamless_expiry").value = e.target.value.slice(0, 2) + "/" + e.target.value.slice(2)
             }
-            }
-            document.getElementById("till_payments_seamless_expiry").addEventListener("input", onExpiryInputChange);
+        }
+        document.getElementById("till_payments_seamless_expiry").addEventListener("input", onExpiryInputChange);
 
         var submit = function (success, error) {
             var expiryData = $seamlessExpiryInput.val().split('/');
-            payment.tokenize(
-                {
+            payment.tokenize({
                     card_holder: $seamlessCardHolderInput.val(),
                     month: expiryData[0],
                     year: '20' + expiryData[1],
