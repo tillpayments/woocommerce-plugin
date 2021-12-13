@@ -132,7 +132,9 @@
         function removeLoader() {
             document.getElementById("loader").style.display = "none";
         };
-        document.getElementById("till_payments_seamless_cvv").addEventListener("load", removeLoader());
+        window.onload = function () {
+            document.querySelector("iframe").addEventListener("load", removeLoader());
+        }
 
         var submit = function (success, error) {
             var expiryData = $seamlessExpiryInput.val().split('/');
