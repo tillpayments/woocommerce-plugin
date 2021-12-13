@@ -49,8 +49,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             return str_replace(' src', ' data-main="payment-js" src', $tag);
         }, 10, 2);
         add_filter('woocommerce_available_payment_gateways', [$this, 'hide_payment_gateways_on_pay_for_order_page'], 100, 1);
- 
-    
+        add_filter('woocommerce_gateway_description', [$this, 'updateDescription'], 5, 1);     
     }
 
     public function hide_payment_gateways_on_pay_for_order_page($available_gateways)
@@ -1224,5 +1223,14 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
     private function workPhoneNumber()
     {
         return null;
+    }
+    /** 
+     * add payment description
+    */
+    public function updateDescription($id)
+    {
+        if ($id == $this->WC_TillPayments_CreditCard->id){
+            echo '<div style = "margin-left: 30px; padding: 5px;">You\'ll be directed to the next page to complete the payment. Powered by <a href="https://tillpayments.com/">Till Payments</a></div>';
+        }
     }
 }
