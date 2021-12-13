@@ -20,14 +20,7 @@ define('TILL_PAYMENTS_EXTENSION_BASEDIR', plugin_dir_path(__FILE__));
 add_action('plugins_loaded', function () {
     require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-provider.php';
     require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-amex.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-diners.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-discover.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-jcb.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-maestro.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-mastercard.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-unionpay.php';
-    require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-creditcard-visa.php';
+
 
     add_filter('woocommerce_payment_gateways', function ($methods) {
         foreach (WC_TillPayments_Provider::paymentMethods() as $paymentMethod) {

@@ -9,14 +9,6 @@ final class WC_TillPayments_Provider
          */
         return [
             'WC_TillPayments_CreditCard',
-            'WC_TillPayments_CreditCard_Amex',
-            'WC_TillPayments_CreditCard_Diners',
-            'WC_TillPayments_CreditCard_Discover',
-            'WC_TillPayments_CreditCard_Jcb',
-            'WC_TillPayments_CreditCard_Maestro',
-            'WC_TillPayments_CreditCard_Mastercard',
-            'WC_TillPayments_CreditCard_UnionPay',
-            'WC_TillPayments_CreditCard_Visa',
         ];
     }
 
