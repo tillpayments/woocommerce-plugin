@@ -443,7 +443,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             /**
              * force 3ds flow
              */
-            // '3dsecure' => 'mandatory',
+            '3dsecure' => 'mandatory',
 
             /**
              * Additional 3ds 2.0 data
