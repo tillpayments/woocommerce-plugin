@@ -49,8 +49,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             return str_replace(' src', ' data-main="payment-js" src', $tag);
         }, 10, 2);
         add_filter('woocommerce_available_payment_gateways', [$this, 'hide_payment_gateways_on_pay_for_order_page'], 100, 1);
- 
-    
+        add_filter('woocommerce_gateway_description', [$this, 'updateDescription'], 5, 1);     
     }
 
     public function hide_payment_gateways_on_pay_for_order_page($available_gateways)
@@ -386,9 +385,35 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         wp_enqueue_script('payment_js');
         wp_enqueue_script('till_payments_js_' . $this->id);
 
-        echo '<script>window.integrationKey="' . $this->get_option('integrationKey') . '";</script><style>.payment_box iframe { width: 100%!important } #till_payments_errors{color: red; }</style>
+        echo '<script>window.integrationKey="' . $this->get_option('integrationKey') . '";</script>
+        <style>.payment_box iframe { width: 100%!important } #till_payments_errors{color: red; } 
+        #loader {
+          position: absolute;  
+          left: 50%;
+          top: 50%;
+          border: 5px dotted #808080;
+          border-radius: 50%;
+          border-top: 5px dotted #FFFFFF;
+          width: 40px;
+          height: 40px;
+          -webkit-animation: spin 2s linear infinite; /* Safari */
+          animation: spin 1s linear infinite;
+        }
+        
+        /* Safari */
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        </style>
         <div id="till_payments_errors"></div>
         <div class="payment_box" style="padding: 25px; background-color: #fff; border-radius: 3px; max-width: 450px; min-height: 385px">
+            <div id = "loader"></div>
             <div id="till_payments_seamless">
                 <input type="hidden" id="till_payments_token" name="token">
                 <p class="form-row form-row-wide" style="height: 80px;">
@@ -443,7 +468,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             /**
              * force 3ds flow
              */
-            '3dsecure' => 'mandatory',
+            // '3dsecure' => 'mandatory',
 
             /**
              * Additional 3ds 2.0 data
@@ -1198,5 +1223,14 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
     private function workPhoneNumber()
     {
         return null;
+    }
+    /** 
+     * add payment description
+    */
+    public function updateDescription($id)
+    {
+        if ($id == $this->WC_TillPayments_CreditCard->id){
+            echo '<div style = "margin-left: 30px; padding: 5px;">You\'ll be directed to the next page to complete the payment. Powered by <a href="https://tillpayments.com/">Till Payments</a></div>';
+        }
     }
 }
