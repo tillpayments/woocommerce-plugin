@@ -133,7 +133,7 @@
         // add in forward slash to mm/yy
         function onExpiryInputChange(e) {
             if (e.target.value.length > 2 && !e.target.value.includes("/")) {
-                document.getElementById("till_payments_seamless_expiry").value = e.target.value.slice(0, 2) + "/" + e.target.value.slice(4)
+                document.getElementById("till_payments_seamless_expiry").value = e.target.value.slice(0, 2) + "/" + e.target.value.slice(2)
             }
         }
         document.getElementById("till_payments_seamless_expiry").addEventListener("input", onExpiryInputChange);
