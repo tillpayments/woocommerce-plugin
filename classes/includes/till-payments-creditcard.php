@@ -422,7 +422,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
                         <span id="till_payments_seamless_card_number" class="input-text" style="padding: 0; width: 100%; border-radius: 3px"></span>
                     </span>
                 </p>
-
+                
                 <p class="form-row form-row-wide" style="height: 80px;">
                     <label for="till_payments_seamless_card_holder">Cardholder Name&nbsp;<abbr class="required" title="required">*</abbr></label>
                     <span class="woocommerce-input-wrapper">
@@ -470,7 +470,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             /**
              * force 3ds flow
              */
-             '3dsecure' => 'mandatory',
+            // '3dsecure' => 'mandatory',
 
             /**
              * Additional 3ds 2.0 data
