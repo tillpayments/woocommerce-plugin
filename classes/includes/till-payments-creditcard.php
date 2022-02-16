@@ -38,7 +38,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('wp_enqueue_scripts', function () {
-            wp_register_script('payment_js', $this->get_option('apiHost') . 'js/integrated/payment.min.js', [], TILL_PAYMENTS_EXTENSION_VERSION, false);
+            wp_register_script('payment_js', $this->get_option('apiHost') . 'js/integrated/payment.1.3.min.js', [], TILL_PAYMENTS_EXTENSION_VERSION, false);
             wp_register_script('till_payments_js_' . $this->id, plugins_url('/tillpayments/assets/js/till-payments.js'), [], TILL_PAYMENTS_EXTENSION_VERSION, false);
         }, 999);
         add_action('woocommerce_api_wc_' . $this->id, [$this, 'process_callback']);
@@ -417,17 +417,19 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             <div id="till_payments_seamless">
                 <input type="hidden" id="till_payments_token" name="token">
                 <p class="form-row form-row-wide" style="height: 80px;">
-                    <label for="till_payments_seamless_card_holder">Cardholder Name&nbsp;<abbr class="required" title="required">*</abbr></label>
-                    <span class="woocommerce-input-wrapper">
-                        <input type="text" class="input-text" id="till_payments_seamless_card_holder" style="border-radius: 3px">
-                    </span>
-                </p>
-                <p class="form-row form-row-wide" style="height: 80px;">
                     <label for="till_payments_seamless_card_number">Card Number&nbsp;<abbr class="required" title="required">*</abbr></label>
                     <span class="woocommerce-input-wrapper">
                         <span id="till_payments_seamless_card_number" class="input-text" style="padding: 0; width: 100%; border-radius: 3px"></span>
                     </span>
                 </p>
+
+                <p class="form-row form-row-wide" style="height: 80px;">
+                    <label for="till_payments_seamless_card_holder">Cardholder Name&nbsp;<abbr class="required" title="required">*</abbr></label>
+                    <span class="woocommerce-input-wrapper">
+                        <input type="text" class="input-text" id="till_payments_seamless_card_holder" style="border-radius: 3px">
+                    </span>
+                </p>
+                
                 <p class="form-row form-row-first" style="height: 80px;">
                     <label for="till_payments_seamless_expiry">Expiration Date&nbsp;<abbr class="required" title="required">*</abbr></label>
                     <span class="woocommerce-input-wrapper">
@@ -468,7 +470,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             /**
              * force 3ds flow
              */
-            // '3dsecure' => 'mandatory',
+             '3dsecure' => 'mandatory',
 
             /**
              * Additional 3ds 2.0 data

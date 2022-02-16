@@ -76,11 +76,21 @@
                 'color': $seamlessCardHolderInput.css('color'),
                 'background': $seamlessCardHolderInput.css('background'),
             };
-            payment = new PaymentJs("1.2");
+            payment = new PaymentJs("1.3");
             payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) {
                 x = document.getElementsByClassName('payment_method_till_payments_creditcard')
                 x[1].style.background = 'transparent'
+                payment.enableAutofill();
 
+                payment.onAutofill(function(data) {
+
+                  $('#till_payments_seamless_card_holder').val(data.card_holder);
+
+                  $('#till_payments_seamless_expiry').val(data.month+"/"+data.year);
+
+                }
+
+              );
                 payment.setNumberStyle(style);
                 payment.setCvvStyle(style);
                 payment.numberOn('input', function (data) {
@@ -123,7 +133,7 @@
         // add in forward slash to mm/yy
         function onExpiryInputChange(e) {
             if (e.target.value.length > 2 && !e.target.value.includes("/")) {
-                document.getElementById("till_payments_seamless_expiry").value = e.target.value.slice(0, 2) + "/" + e.target.value.slice(2)
+                document.getElementById("till_payments_seamless_expiry").value = e.target.value.slice(0, 2) + "/" + e.target.value.slice(4)
             }
         }
         document.getElementById("till_payments_seamless_expiry").addEventListener("input", onExpiryInputChange);
@@ -141,7 +151,7 @@
             payment.tokenize({
                     card_holder: $seamlessCardHolderInput.val(),
                     month: expiryData[0],
-                    year: '20' + expiryData[1],
+                    year: expiryData[1],
                     email: $seamlessEmailInput.val()
                 },
                 function (token, cardData) {
