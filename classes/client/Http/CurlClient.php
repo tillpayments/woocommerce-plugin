@@ -223,7 +223,7 @@ class CurlClient implements ClientInterface {
 
         $requestUri = $path . ($query ? '?' . $query : '') . ($anchor ? '#' . $anchor : '');
 
-        $contentType = 'text/xml; charset=utf-8';
+        $contentType = 'application/xml; charset=utf-8';
 
         $signature = $this->createSignature($sharedSecret, 'POST', $body, $contentType, $timestamp, $requestUri);
         $authHeader = $this->serviceName . ' ' . $apiId . ':' . $signature;
