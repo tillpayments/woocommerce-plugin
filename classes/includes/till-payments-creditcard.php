@@ -461,7 +461,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
                 'default' => 'debit',
                 'options' => [
                     'debit' => 'Debit',
-                    'preauthorize' => 'Preauthorize/Capture/Void',
+                    'preauthorize' => 'Preauthorize/Capture',
                 ],
             ],
         ];
