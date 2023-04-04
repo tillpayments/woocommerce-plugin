@@ -1,12 +1,12 @@
 # Woocommerce Till Payments Plugin
 
-Contributors: Till Payments
-Tags: Credit Card, e-commerce, payment, processing, checkout
-Requires Wordpress: 4.9
-Tested up to Wordpress: 6.2
-Requires Woocommerce: 3.6.0
-Tested up to Woocommerce: 7.5.1
-Requires PHP: 7.2.5
+Contributors: Till Payments\
+Tags: Credit Card, e-commerce, payment, processing, checkout\
+Requires Wordpress: 4.9\
+Tested up to Wordpress: 6.2\
+Requires Woocommerce: 3.6.0\
+Tested up to Woocommerce: 7.5.1\
+Requires PHP: 7.2.5\
 Stable tag: 1.8.1
 
 ## Description
