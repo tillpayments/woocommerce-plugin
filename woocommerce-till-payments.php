@@ -2,10 +2,8 @@
 /**
  * Plugin Name: WooCommerce Till Payments Extension
  * Description: Till Payments for WooCommerce
- * Version: 1.7.4
+ * Version: 1.8.1
  * Author: Till Payments
- * WC requires at least: 3.6.0
- * WC tested up to: 3.7.0
  */
 
 use TillPayments\Client\Transaction\Capture;
@@ -17,7 +15,7 @@ if (!defined('ABSPATH')) {
 
 define('TILL_PAYMENTS_EXTENSION_URL', 'https://gateway.tillpayments.com/');
 define('TILL_PAYMENTS_EXTENSION_NAME', 'Till Payments');
-define('TILL_PAYMENTS_EXTENSION_VERSION', '1.7.4');
+define('TILL_PAYMENTS_EXTENSION_VERSION', '1.8.1');
 define('TILL_PAYMENTS_EXTENSION_UID_PREFIX', 'till_payments_');
 define('TILL_PAYMENTS_EXTENSION_BASEDIR', plugin_dir_path(__FILE__));
 

@@ -235,7 +235,7 @@ class CurlClient implements ClientInterface {
             'X-Authorization' => $authHeader,
             'Content-Type' => $contentType,
             'X-Source-Platform' => 'woocommerce',
-            'X-SDK-Type' => 'IXOPAY PHP Client',
+            'X-SDK-Type' => 'TillPayments PHP Client',
             'X-SDK-Version' => Client::VERSION,
         );
         if (phpversion()) {
