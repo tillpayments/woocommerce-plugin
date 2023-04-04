@@ -49,7 +49,7 @@
         var $seamlessCardNumberInput = $('#till_payments_seamless_card_number', $seamlessForm);
         var $seamlessCvvInput = $('#till_payments_seamless_cvv', $seamlessForm);
 
-        var init = function (integrationKey, invalidCallback, validCallback) {
+        var init = async function (integrationKey, invalidCallback, validCallback) {
             _invalidCallback = invalidCallback;
             _validCallback = validCallback;
 
@@ -76,8 +76,32 @@
                 'color': $seamlessCardHolderInput.css('color'),
                 'background': $seamlessCardHolderInput.css('background'),
             };
-            payment = new PaymentJs("1.3");
-            payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) {
+
+
+            const waitForScript = el => {
+                return new Promise((res, rej) => {
+                    let retryCounter = 0;
+
+                    const findScriptElement = el => {
+                        if (document.querySelector(el) !== null) 
+                            res(new PaymentJs('1.3'));
+
+                        else if (retryCounter == 50) 
+                            rej("Payment Js script failed to load"); 
+
+                        else {
+                            retryCounter += 1;
+                            setTimeout(() => findScriptElement(el), 100);
+                        }
+                    }
+
+                    findScriptElement(el);
+                });
+            }
+
+            await waitForScript(`[data-main="payment-js"]`).then(p => {
+                payment = p;
+                payment.init(integrationKey, $seamlessCardNumberInput.prop('id'), $seamlessCvvInput.prop('id'), function (payment) {
                 x = document.getElementsByClassName('payment_method_till_payments_creditcard')
                 x[1].style.background = 'transparent'
                 payment.enableAutofill();
@@ -90,18 +114,21 @@
 
                 }
 
-              );
-                payment.setNumberStyle(style);
-                payment.setCvvStyle(style);
-                payment.numberOn('input', function (data) {
-                    validNumber = data.validNumber;
-                    validate();
-                });
-                payment.cvvOn('input', function (data) {
-                    validCvv = data.validCvv;
-                    validate();
-                });
+                );
+                    payment.setNumberStyle(style);
+                    payment.setCvvStyle(style);
+                    payment.numberOn('input', function (data) {
+                        validNumber = data.validNumber;
+                        validate();
+                    });
+                    payment.cvvOn('input', function (data) {
+                        validCvv = data.validCvv;
+                        validate();
+                    });
             });
+            })
+            .catch(e => {console.log(e)})
+
             $('input, select', $seamlessForm).on('input', validate);
         };
 
