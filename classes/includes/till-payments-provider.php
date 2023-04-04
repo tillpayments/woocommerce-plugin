@@ -9,6 +9,8 @@ final class WC_TillPayments_Provider
          */
         return [
             'WC_TillPayments_CreditCard',
+            'WC_TillPayments_GooglePay',
+            'WC_TillPayments_ApplePay',
         ];
     }
 
