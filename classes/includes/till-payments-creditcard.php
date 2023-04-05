@@ -1,5 +1,7 @@
 <?php
 
+use TillPayments\Client\Transaction\Refund;
+
 class WC_TillPayments_CreditCard extends WC_Payment_Gateway
 {
     public $id = 'creditcard';
@@ -40,10 +42,14 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         $this->init_form_fields();
         $this->init_settings();
 
+        $this->supports = array(
+            'products',
+            'refunds'
+        );
+
         $this->title = $this->get_option('title');
         $this->callbackUrl = add_query_arg('wc-api', 'wc_' . $this->id, home_url('/'));
 
-        
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('wp_enqueue_scripts', function () {
@@ -110,6 +116,11 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
     private function encodeOrderId($orderId)
     {
         return $orderId . '-' . date('YmdHis') . substr(sha1(uniqid()), 0, 10);
+    }
+
+    private function encodeRefundId($orderId)
+    {
+        return $orderId . '-refund-' . date('YmdHis') . substr(sha1(uniqid()), 0, 10);
     }
 
     private function decodeOrderId($orderId)
@@ -330,6 +341,97 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         $this->log('  > fallback return point reached. something went wrong?', WC_Log_Levels::ERROR);
         return $this->paymentFailedResponse();
     }
+
+    public function process_refund($order_id, $amount = null, $reason = '') {
+        $this->log('Processing new refund...');
+
+        /**
+         * order & user
+         */
+        $this->order = new WC_Order($order_id);
+        $this->user = $this->order->get_user();
+
+        /**
+         * gateway client
+         */
+        WC_TillPayments_Provider::autoloadClient();
+        TillPayments\Client\Client::setApiUrl($this->get_option('apiHost'));
+        $client = new TillPayments\Client\Client(
+            $this->get_option('apiUser'),
+            htmlspecialchars_decode($this->get_option('apiPassword')),
+            $this->get_option('apiKey'),
+            $this->get_option('sharedSecret')
+        );
+
+        /**
+         * transaction
+         */
+        $transaction = new Refund();
+        $refundTxId = $this->encodeRefundId($order_id);
+        $transaction->setTransactionId($refundTxId)
+            ->setAmount(floatval($amount))
+            ->setCurrency($this->order->get_currency())
+            ->setReferenceTransactionId($this->order->get_meta('paymentUuid'))
+            ->setCallbackUrl($this->callbackUrl);
+
+        /**
+         * transaction
+         */
+        $result = $client->refund($transaction);
+
+        if ($result->isSuccess()) {
+            switch ($result->getReturnType()) {
+                case TillPayments\Client\Transaction\Result::RETURN_TYPE_ERROR:
+                    $errors = $result->getErrors();
+                    $this->log('  > return type: ERROR', WC_Log_Levels::ERROR);
+                    $this->log('  > errors: '.print_r($errors, true), WC_Log_Levels::ERROR);
+
+                    if (empty($errors)) {
+                        return false;
+                    }
+
+                    $errorMsg = '';
+                    foreach ($errors as $error) {
+                        $errorMsg .= $error->getMessage() . PHP_EOL;
+                    }
+
+                    return new WP_Error('error', $errorMsg);
+                case TillPayments\Client\Transaction\Result::RETURN_TYPE_PENDING:
+                    $this->log('  > return type: PENDING');
+                    $this->log('  > result data: '.print_r($result->toArray(), true));
+                    break;
+                case TillPayments\Client\Transaction\Result::RETURN_TYPE_FINISHED:
+                    $this->log('  > return type: FINISHED');
+                    $this->order->add_order_note('TillPayments refund ID: ' . $result->getReferenceId(), false);
+                    $this->log('  > result data: '.print_r($result->toArray(), true));
+
+                    return true;
+            }
+        } else {
+            $errors = $result->getErrors();
+
+            if (empty($errors)) {
+                return false;
+            }
+
+            $this->log('  > request failed', WC_Log_Levels::ERROR);
+            $this->log('  > errors: '.print_r($errors, true), WC_Log_Levels::ERROR);
+
+            $errorMsg = '';
+            foreach ($errors as $error) {
+                $errorMsg .= $error->getMessage().PHP_EOL;
+            }
+
+            return new WP_Error('error', $errorMsg);
+        }
+
+        /**
+         * something went wrong
+         */
+        $this->log('  > fallback return point reached. something went wrong?', WC_Log_Levels::ERROR);
+        return false;
+    }
+
 
     private function paymentSuccessUrl($order)
     {
