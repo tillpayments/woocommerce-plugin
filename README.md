@@ -7,7 +7,7 @@ Tested up to Wordpress: 6.2\
 Requires Woocommerce: 3.6.0\
 Tested up to Woocommerce: 7.5.1\
 Requires PHP: 7.2.5\
-Stable tag: 1.8.2
+Stable tag: 1.9.2
 
 ## Description
 
@@ -41,16 +41,13 @@ Please refer to https://tillpayments.com/ for merchant sign-up and more.
 
 #### Plugin Config
 
-**Title** = what you want the payment option to be called on the storefront eg 'Credit Card'
-**API Host** = endpoint where your transactions will be sent:
-
-- **Sandbox / developement** = https://test-gateway.tillpayments.com/
-- **Production** = https://gateway.tillpayments.com/
-- **API Username**: Obtained from the Users section on the web Gateway portal. This is the API username, not the Web user you logged in with
+- **Title**: what you want the payment option to be called on the storefront eg 'Credit Card'
+- **API Host** = environment where your transactions will be sent
+- **API Username**: Obtained from the Users section on the Gateway portal. This is the API username (not the Web user you logged in with)
 - **API Password**: Password of the API user
 - **API Key**: Obtained from your Gateway connector settings
 - **Shared Secret**: The _Shared Secret_ obtained from your Gateway connector
-- **Public Integration Key**: Obtained from your Gateway connector where it is labelled as _Public Integration Key (e.g. for payment.js)_
+- **Public Integration Key**: Obtained from your Gateway connector where it is labelled as Public Integration Key (e.g. for payment.js)
 
 See [Till Payment's Support - Gateway Credentials](https://support.tillpayments.com/hc/en-us/articles/6694543251215-Till-Payments-Gateway-Credentials) for instructions on obtaining your production credentials
 
@@ -58,14 +55,16 @@ See [Till Payment's Support - Gateway Credentials](https://support.tillpayments.
 
 ## Common User Errors
 
-### Payment input fields no loading
+### Payment input fields not loading
 
 Ensure you have entered the correct **Integration Key** and are targeting the correct environment.
 
-In rare cases another third party plugin can conflict with our own and introduce undesirable behaviour. Preventing the payment inputs from loading is just one example. This is usually the case when another plugin is raising exceptions and can often be diagnosed by inspecting the server logs as well as checking the browser's console for errors while the payment page is loading.
+In rare cases other third party plugin can conflict with our plugin to cause undesirable behaviour. Preventing the payment inputs from loading is just one example. This is usually the case when another plugin is raising exceptions and can often be diagnosed by inspecting the server logs as well as checking the browser's console for errors while the payment page is loading.
 
 ### All payments declined in testing
 
 While targeting our sandbox environment there is a list of acceptable test cards you can use to simulate different outcomes. Using any other made up card, or a live card number, will result in a decline.
+
+Here are a list of the cards that can be used in the sandbox environment.
 
 [Test Card Numbers](https://gateway.tillpayments.com/documentation/connectors#simulator-testing-connector-test-data)
