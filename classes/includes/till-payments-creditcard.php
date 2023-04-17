@@ -515,10 +515,14 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             ],
             'apiHost' => [
                 'title' => 'API Host',
-                'type' => 'text',
-                'label' => 'API Host',
-                'description' => 'API Host',
+                'type' => 'select',
+                'label' => 'Environment',
+                'description' => 'Environment',
                 'default' => TILL_PAYMENTS_EXTENSION_URL,
+                'options' => [
+                    TILL_PAYMENTS_EXTENSION_URL_TEST => 'Test (Sandbox)',
+                    TILL_PAYMENTS_EXTENSION_URL => 'Live (Production)'
+                ],
             ],
             'apiUser' => [
                 'title' => 'API User',

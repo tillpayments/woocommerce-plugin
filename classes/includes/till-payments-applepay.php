@@ -771,10 +771,15 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
                 'default' => $this->method_title,
             ],
             'apiHost' => [
-                'title' => 'TillPayments API Host',
-                'type' => 'text',
-                'description' => 'API Host provided by TillPayments',
+                'title' => 'API Host',
+                'type' => 'select',
+                'label' => 'Environment',
+                'description' => 'Environment',
                 'default' => TILL_PAYMENTS_EXTENSION_URL,
+                'options' => [
+                    TILL_PAYMENTS_EXTENSION_URL_TEST => 'Test (Sandbox)',
+                    TILL_PAYMENTS_EXTENSION_URL => 'Live (Production)'
+                ],
             ],
             'apiUser' => [
                 'title' => 'TillPayments API User',
