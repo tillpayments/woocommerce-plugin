@@ -7,7 +7,7 @@ Tested up to Wordpress: 6.2\
 Requires Woocommerce: 3.6.0\
 Tested up to Woocommerce: 7.5.1\
 Requires PHP: 7.2.5\
-Stable tag: 1.9.2
+Stable tag: 1.10.0
 
 ## Description
 
