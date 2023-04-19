@@ -527,19 +527,19 @@ class WC_TillPayments_GooglePay extends WC_Payment_Gateway
             ],
             'apiPassword' => [
                 'title' => 'API Password',
-                'type' => 'text',
+                'type' => 'password',
                 'description' => 'API Password provided by TillPayments',
                 'default' => '',
             ],
             'apiKey' => [
                 'title' => 'API Key',
-                'type' => 'text',
+                'type' => 'password',
                 'description' => 'API Key provided by TillPayments',
                 'default' => '',
             ],
             'sharedSecret' => [
                 'title' => 'Shared Secret',
-                'type' => 'text',
+                'type' => 'password',
                 'description' => 'Shared Secret provided by TillPayments',
                 'default' => '',
             ],
