@@ -506,62 +506,57 @@ class WC_TillPayments_GooglePay extends WC_Payment_Gateway
                 'title' => 'API Host',
                 'type' => 'select',
                 'label' => 'Environment',
-                'description' => 'Environment',
+                'description' => 'Till Environment',
                 'default' => TILL_PAYMENTS_EXTENSION_URL,
                 'options' => [
                     TILL_PAYMENTS_EXTENSION_URL_TEST => 'Test (Sandbox)',
                     TILL_PAYMENTS_EXTENSION_URL => 'Live (Production)'
                 ],
             ],
+            'gateway_merchant_id' => [
+                'title' => 'Merchant GUID',
+                'type' => 'text',
+                'description' => 'Merchant GUID from Till Gateway',
+                'default' => '',
+            ],
             'apiUser' => [
-                'title' => 'TillPayments API User',
+                'title' => 'API User',
                 'type' => 'text',
                 'description' => 'API User provided by TillPayments',
                 'default' => '',
             ],
             'apiPassword' => [
-                'title' => 'TillPayments API Password',
-                'type' => 'password',
+                'title' => 'API Password',
+                'type' => 'text',
                 'description' => 'API Password provided by TillPayments',
                 'default' => '',
             ],
             'apiKey' => [
-                'title' => 'TillPayments API Key',
-                'type' => 'password',
+                'title' => 'API Key',
+                'type' => 'text',
                 'description' => 'API Key provided by TillPayments',
                 'default' => '',
             ],
             'sharedSecret' => [
-                'title' => 'TillPayments Shared Secret',
-                'type' => 'password',
+                'title' => 'Shared Secret',
+                'type' => 'text',
                 'description' => 'Shared Secret provided by TillPayments',
                 'default' => '',
             ],
+            
             'environment' => [
                 'title' => 'GooglePay Environment',
                 'type' => 'select',
                 'default' => 'TEST',
                 'options' => [
-                    'TEST' => 'TEST',
-                    'PRODUCTION' => 'PRODUCTION'
+                    'TEST' => 'Googlepay Test Environment',
+                    'PRODUCTION' => 'Googlepay Production Environment'
                 ]
             ],
-            'gateway_name' => [
-                'title' => 'GooglePay Gateway Name',
-                'type' => 'text',
-                'description' => 'Gateway Name provided by GooglePay',
-                'default' => '',
-            ],
-            'gateway_merchant_id' => [
-                'title' => 'GooglePay Gateway Merchant ID',
-                'type' => 'text',
-                'description' => 'Gateway Merchant ID provided by GooglePay',
-                'default' => '',
-            ],
             'merchant_id' => [
-                'title' => 'GooglePay Merchant ID',
+                'title' => 'GooglePay Production Merchant ID',
                 'type' => 'text',
-                'description' => 'Your GooglePay Merchant ID',
+                'description' => 'Your Google Merchant ID, from Google business console',
                 'default' => '',
             ],
             'merchant_name' => [
@@ -605,15 +600,14 @@ class WC_TillPayments_GooglePay extends WC_Payment_Gateway
                 'title' => 'Allowed Card Networks',
                 'type' => 'multiselect',
                 'description' => 'Card networks you want to accept',
-                'default' => ['AMEX', 'DISCOVER', 'INTERAC', 'JCB', 'MASTERCARD', 'MIR', 'VISA'],
+                'default' => ['VISA','MASTERCARD','AMEX', 'DISCOVER', 'INTERAC', 'JCB', ],
                 'options' => [
+                    'VISA' => 'VISA',
+                    'MASTERCARD' => 'MASTERCARD',
                     'AMEX' => 'AMEX',
                     'DISCOVER' => 'DISCOVER',
                     'INTERAC' => 'INTERAC',
                     'JCB' => 'JCB',
-                    'MASTERCARD' => 'MASTERCARD',
-                    'MIR' => 'MIR',
-                    'VISA' => 'VISA',
                 ],
             ],
             'allowed_card_auth_methods' => [
@@ -650,7 +644,7 @@ class WC_TillPayments_GooglePay extends WC_Payment_Gateway
             'button_color' => $this->get_option('button_color'),
             'allowed_card_networks' => $this->get_option('allowed_card_networks'),
             'allowed_card_auth_methods' => $this->get_option('allowed_card_auth_methods'),
-            'gateway_name' => $this->get_option('gateway_name'),
+            'gateway_name' => 'ixopay',
             'gateway_merchant_id' => $this->get_option('gateway_merchant_id'),
             'merchant_id' => $this->get_option('merchant_id'),
             'merchant_name' => $this->get_option('merchant_name'),
