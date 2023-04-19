@@ -806,9 +806,9 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
                 'default' => '',
             ],
             'merchant_id_fqdn' => [
-                'title' => 'ApplePay Merchant ID FQDN',
+                'title' => 'ApplePay Merchant Domain',
                 'type' => 'text',
-                'description' => 'Fully Qualified Domain Name associated with your ApplePay Merchant ID',
+                'description' => 'Domain used with Applepay without https extension. (Please request Till enable all domain names for Applepay service)',
                 'default' => '',
             ],
             'certificate' => [
