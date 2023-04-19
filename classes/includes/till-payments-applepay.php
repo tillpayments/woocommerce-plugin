@@ -611,7 +611,7 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
 
         $merchantIdCert = base64_decode($this->get_option('certificate'));
         $merchantIdKey = base64_decode($this->get_option('private_key'));
-        $merchantIdKeyPassword = $this->get_option('private_key_password');
+        //$merchantIdKeyPassword = $this->get_option('private_key_password');
         if ($merchantIdCert === false) {
             $this->log('  > missing merchant certificate! Aborting.', WC_Log_Levels::ERROR);
             http_response_code(500);
@@ -638,7 +638,7 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
         }
 
         $requestBody = [
-            'merchantIdentifier' => $this->get_option('merchant_id'),
+            'merchantIdentifier' => 'merchant.com.tillpayments.prod',
             'displayName' => $this->get_option('merchant_name'),
             'initiative' => 'web',
             'initiativeContext' => $this->get_option('merchant_id_fqdn'),
@@ -774,7 +774,7 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
                 'title' => 'API Host',
                 'type' => 'select',
                 'label' => 'Environment',
-                'description' => 'Environment',
+                'description' => 'Till Environment',
                 'default' => TILL_PAYMENTS_EXTENSION_URL,
                 'options' => [
                     TILL_PAYMENTS_EXTENSION_URL_TEST => 'Test (Sandbox)',
@@ -782,34 +782,27 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
                 ],
             ],
             'apiUser' => [
-                'title' => 'TillPayments API User',
+                'title' => 'API User',
                 'type' => 'text',
                 'description' => 'API User provided by TillPayments',
                 'default' => '',
             ],
             'apiPassword' => [
-                'title' => 'TillPayments API Password',
+                'title' => 'API Password',
                 'type' => 'password',
                 'description' => 'API Password provided by TillPayments',
                 'default' => '',
             ],
             'apiKey' => [
-                'title' => 'TillPayments API Key',
+                'title' => 'API Key',
                 'type' => 'password',
                 'description' => 'API Key provided by TillPayments',
                 'default' => '',
             ],
             'sharedSecret' => [
-                'title' => 'TillPayments Shared Secret',
+                'title' => 'Shared Secret',
                 'type' => 'password',
                 'description' => 'Shared Secret provided by TillPayments',
-                'default' => '',
-            ],
-
-            'merchant_id' => [
-                'title' => 'ApplePay Merchant ID',
-                'type' => 'text',
-                'description' => 'Your ApplePay Merchant ID',
                 'default' => '',
             ],
             'merchant_id_fqdn' => [
@@ -828,12 +821,6 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
                 'title' => 'ApplePay Private Key',
                 'type' => 'pemfile',
                 'description' => 'Private Key File (*.pem) provided by ApplePay',
-                'default' => '',
-            ],
-            'private_key_password' => [
-                'title' => 'ApplePay Private Key Password',
-                'type' => 'password',
-                'description' => 'Password used to decrypt your private key (optional)',
                 'default' => '',
             ],
             'merchant_name' => [
@@ -885,16 +872,15 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
                 'title' => 'Allowed Card Networks',
                 'type' => 'multiselect',
                 'description' => 'Card networks you want to accept',
-                'default' => ['amex', 'chinaUnionPay', 'discover', 'interac', 'jcb', 'masterCard', 'privateLabel', 'visa'],
+                'default' => ['visa', 'masterCard', 'amex', 'chinaUnionPay', 'discover', 'interac', 'jcb'],
                 'options' => [
+                    'visa' => 'VISA',
+                    'masterCard' => 'MASTERCARD',
                     'amex' => 'AMEX',
                     'chinaUnionPay' => 'CHINA UNION PAY',
                     'discover' => 'DISCOVER',
                     'interac' => 'INTERAC',
                     'jcb' => 'JCB',
-                    'masterCard' => 'MASTERCARD',
-                    'privateLabel' => 'PRIVATE LABEL',
-                    'visa' => 'VISA',
                 ],
             ],
             'transactionRequest' => [
