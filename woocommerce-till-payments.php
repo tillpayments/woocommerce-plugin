@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Till Payments Extension
  * Description: Till Payments for WooCommerce
- * Version: 2
+ * Version: 1.10.2
  * Author: Till Payments
  */
 
