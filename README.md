@@ -1,36 +1,70 @@
-# WooCommerce Till Payments Extension 
+# Woocommerce Till Payments Plugin
 
-Contributors: Till Payments  
-Tags: Credit Card, e-commerce, payment, checkout  
-Requires at least: 4.9  
-Tested up to: 5.2.3  
-Requires PHP: 7.1  
-Stable tag: 1.7.3  
-WC requires at least: 3.6.0  
-WC tested up to: 3.7.0  
+Contributors: Till Payments\
+Tags: Credit Card, e-commerce, payment, processing, checkout\
+Requires Wordpress: 4.9\
+Tested up to Wordpress: 6.2\
+Requires Woocommerce: 3.6.0\
+Tested up to Woocommerce: 7.5.1\
+Requires PHP: 7.2.5\
+Stable tag: 1.10.2
 
-Till Payments WooCommerce Extension
+## Description
 
-##  Installation
+Till Payments is a multi-region Acquirer offering an omnichannel card present and card not present solution for merchants looking for a one stop payments solution.
 
-### Direct Upload
+The installation and activation of this plugin allows a merchant's store to integrate directly to the Till Payments Gateway.
+Please refer to https://tillpayments.com/ for merchant sign-up and more.
 
-Upload the plugin files to the `/wp-content/plugins/tillpayments` directory
+## Plugin Functions
 
-### WordPress Installer
+- Debit
+- Preauthorise + Capture
+- 3DSecure (3DS v2)
+- Applepay
+- Googlepay
 
-1. Download ZIP from GitHub repo
-2. Unzip and navigate inside the `woocommerce-plugin-master/` folder, rename the inner folder to `tillpayments` and zip the resulting folder
-3. Upload tillpayments.zip through WordPress Admin panel via Plugins > Add New > Upload Plugin
-4. Activate the plugin through the 'Plugins' screen in WordPress
+## Installation
 
-## Configuration
+1. Upload the plugin files to the `/wp-content/plugins/tillpayments` directory, or install the plugin through the WordPress plugins screen directly.
+   (**IMPORTANT**: If uploaded via Wordpress please ensure the plugin is placed into the path above / named accordingly)
+1. Activate the plugin through the 'Plugins' screen in WordPress
 
-1. Go to `WooCommerce` > `Settings` > `Payments` in your shop's admin area.
-2. Click on `Set up` on a `Till Payments` payment method.
-	1. Enter your API and payment method credentials.
-	2. Click on `Save changes`.
-	3. Go back to `Payments` overview.
-3. Enable configured `Till Payments` payment methods.
+## Plugin Activation
 
-The active payment methods will be provided to your customers during checkout.
+1. Go to `WooCommerce` > `Settings` > `Payments` in your store's backoffice admin area.
+1. Click on `Set up` on the `Till Payments` payment method.
+   1. Enter your API and payment method credentials (refer to config fields for futher info)
+   1. Click on `Save changes`.
+   1. Go back to `Payments` overview.
+1. Enable configured `Till Payments` payment methods using the slide toggles.
+
+#### Plugin Config
+
+- **Title**: what you want the payment option to be called on the storefront eg 'Credit Card'
+- **API Host** = environment where your transactions will be sent
+- **API Username**: Obtained from the Users section on the Gateway portal. This is the API username (not the Web user you logged in with)
+- **API Password**: Password of the API user
+- **API Key**: Obtained from your Gateway connector settings
+- **Shared Secret**: The _Shared Secret_ obtained from your Gateway connector
+- **Public Integration Key**: Obtained from your Gateway connector where it is labelled as Public Integration Key (e.g. for payment.js)
+
+See [Till Payment's Support - Gateway Credentials](https://support.tillpayments.com/hc/en-us/articles/6694543251215-Till-Payments-Gateway-Credentials) for instructions on obtaining your production credentials
+
+![](./config_screenshot.png)
+
+## Common User Errors
+
+### Payment input fields not loading
+
+Ensure you have entered the correct **Integration Key** and are targeting the correct environment.
+
+In rare cases other third party plugin can conflict with our plugin to cause undesirable behaviour. Preventing the payment inputs from loading is just one example. This is usually the case when another plugin is raising exceptions and can often be diagnosed by inspecting the server logs as well as checking the browser's console for errors while the payment page is loading.
+
+### All payments declined in testing
+
+While targeting our sandbox environment there is a list of acceptable test cards you can use to simulate different outcomes. Using any other made up card, or a live card number, will result in a decline.
+
+Here are a list of the cards that can be used in the sandbox environment.
+
+[Test Card Numbers](https://gateway.tillpayments.com/documentation/connectors#simulator-testing-connector-test-data)

@@ -4,115 +4,76 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9587173caabe23790103bf178b5a1d49c3540edbd68b1df48d0447c874511d41
+class ComposerStaticInit31bc80146707b06a10e43a39d40e53a9
 {
+    public static $files = array (
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'TillPayments\\Client\\' => 20,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
-            'TillPayments\\Client\\' => 27,
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Psr\\Log\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-        ),
         'TillPayments\\Client\\' => 
         array (
             0 => __DIR__ . '/../../..' . '/classes/client',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
     );
 
     public static $classMap = array (
-        'TillPayments\\Client\\Callback\\ChargebackData' => __DIR__ . '/../../..' . '/classes/client/Callback/ChargebackData.php',
-        'TillPayments\\Client\\Callback\\ChargebackReversalData' => __DIR__ . '/../../..' . '/classes/client/Callback/ChargebackReversalData.php',
-        'TillPayments\\Client\\Callback\\Result' => __DIR__ . '/../../..' . '/classes/client/Callback/Result.php',
-        'TillPayments\\Client\\Client' => __DIR__ . '/../../..' . '/classes/client/Client.php',
-        'TillPayments\\Client\\CustomerProfile\\CustomerData' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/CustomerData.php',
-        'TillPayments\\Client\\CustomerProfile\\DeleteProfileResponse' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/DeleteProfileResponse.php',
-        'TillPayments\\Client\\CustomerProfile\\GetProfileResponse' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/GetProfileResponse.php',
-        'TillPayments\\Client\\CustomerProfile\\PaymentData\\CardData' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/PaymentData/CardData.php',
-        'TillPayments\\Client\\CustomerProfile\\PaymentData\\IbanData' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/PaymentData/IbanData.php',
-        'TillPayments\\Client\\CustomerProfile\\PaymentData\\PaymentData' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/PaymentData/PaymentData.php',
-        'TillPayments\\Client\\CustomerProfile\\PaymentData\\WalletData' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/PaymentData/WalletData.php',
-        'TillPayments\\Client\\CustomerProfile\\PaymentInstrument' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/PaymentInstrument.php',
-        'TillPayments\\Client\\CustomerProfile\\UpdateProfileResponse' => __DIR__ . '/../../..' . '/classes/client/CustomerProfile/UpdateProfileResponse.php',
-        'TillPayments\\Client\\Data\\CreditCardCustomer' => __DIR__ . '/../../..' . '/classes/client/Data/CreditCardCustomer.php',
-        'TillPayments\\Client\\Data\\Customer' => __DIR__ . '/../../..' . '/classes/client/Data/Customer.php',
-        'TillPayments\\Client\\Data\\Data' => __DIR__ . '/../../..' . '/classes/client/Data/Data.php',
-        'TillPayments\\Client\\Data\\IbanCustomer' => __DIR__ . '/../../..' . '/classes/client/Data/IbanCustomer.php',
-        'TillPayments\\Client\\Data\\Item' => __DIR__ . '/../../..' . '/classes/client/Data/Item.php',
-        'TillPayments\\Client\\Data\\Request' => __DIR__ . '/../../..' . '/classes/client/Data/Request.php',
-        'TillPayments\\Client\\Data\\Result\\CreditcardData' => __DIR__ . '/../../..' . '/classes/client/Data/Result/CreditcardData.php',
-        'TillPayments\\Client\\Data\\Result\\IbanData' => __DIR__ . '/../../..' . '/classes/client/Data/Result/IbanData.php',
-        'TillPayments\\Client\\Data\\Result\\PhoneData' => __DIR__ . '/../../..' . '/classes/client/Data/Result/PhoneData.php',
-        'TillPayments\\Client\\Data\\Result\\ResultData' => __DIR__ . '/../../..' . '/classes/client/Data/Result/ResultData.php',
-        'TillPayments\\Client\\Data\\Result\\WalletData' => __DIR__ . '/../../..' . '/classes/client/Data/Result/WalletData.php',
-        'TillPayments\\Client\\Exception\\ClientException' => __DIR__ . '/../../..' . '/classes/client/Exception/ClientException.php',
-        'TillPayments\\Client\\Exception\\InvalidValueException' => __DIR__ . '/../../..' . '/classes/client/Exception/InvalidValueException.php',
-        'TillPayments\\Client\\Exception\\RateLimitException' => __DIR__ . '/../../..' . '/classes/client/Exception/RateLimitException.php',
-        'TillPayments\\Client\\Exception\\TimeoutException' => __DIR__ . '/../../..' . '/classes/client/Exception/TimeoutException.php',
-        'TillPayments\\Client\\Exception\\TypeException' => __DIR__ . '/../../..' . '/classes/client/Exception/TypeException.php',
-        'TillPayments\\Client\\Http\\ClientInterface' => __DIR__ . '/../../..' . '/classes/client/Http/ClientInterface.php',
-        'TillPayments\\Client\\Http\\CurlClient' => __DIR__ . '/../../..' . '/classes/client/Http/CurlClient.php',
-        'TillPayments\\Client\\Http\\CurlExec' => __DIR__ . '/../../..' . '/classes/client/Http/CurlExec.php',
-        'TillPayments\\Client\\Http\\Exception\\ClientException' => __DIR__ . '/../../..' . '/classes/client/Http/Exception/ClientException.php',
-        'TillPayments\\Client\\Http\\Exception\\ResponseException' => __DIR__ . '/../../..' . '/classes/client/Http/Exception/ResponseException.php',
-        'TillPayments\\Client\\Http\\Response' => __DIR__ . '/../../..' . '/classes/client/Http/Response.php',
-        'TillPayments\\Client\\Http\\ResponseInterface' => __DIR__ . '/../../..' . '/classes/client/Http/ResponseInterface.php',
-        'TillPayments\\Client\\Json\\DataObject' => __DIR__ . '/../../..' . '/classes/client/Json/DataObject.php',
-        'TillPayments\\Client\\Json\\ErrorResponse' => __DIR__ . '/../../..' . '/classes/client/Json/ErrorResponse.php',
-        'TillPayments\\Client\\Json\\ResponseObject' => __DIR__ . '/../../..' . '/classes/client/Json/ResponseObject.php',
-        'TillPayments\\Client\\Schedule\\ScheduleData' => __DIR__ . '/../../..' . '/classes/client/Schedule/ScheduleData.php',
-        'TillPayments\\Client\\Schedule\\ScheduleError' => __DIR__ . '/../../..' . '/classes/client/Schedule/ScheduleError.php',
-        'TillPayments\\Client\\Schedule\\ScheduleResult' => __DIR__ . '/../../..' . '/classes/client/Schedule/ScheduleResult.php',
-        'TillPayments\\Client\\StatusApi\\StatusRequestData' => __DIR__ . '/../../..' . '/classes/client/StatusApi/StatusRequestData.php',
-        'TillPayments\\Client\\StatusApi\\StatusResult' => __DIR__ . '/../../..' . '/classes/client/StatusApi/StatusResult.php',
-        'TillPayments\\Client\\Transaction\\Base\\AbstractTransaction' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/AbstractTransaction.php',
-        'TillPayments\\Client\\Transaction\\Base\\AbstractTransactionWithReference' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/AbstractTransactionWithReference.php',
-        'TillPayments\\Client\\Transaction\\Base\\AddToCustomerProfileInterface' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/AddToCustomerProfileInterface.php',
-        'TillPayments\\Client\\Transaction\\Base\\AddToCustomerProfileTrait' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/AddToCustomerProfileTrait.php',
-        'TillPayments\\Client\\Transaction\\Base\\AmountableInterface' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/AmountableInterface.php',
-        'TillPayments\\Client\\Transaction\\Base\\AmountableTrait' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/AmountableTrait.php',
-        'TillPayments\\Client\\Transaction\\Base\\ItemsInterface' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/ItemsInterface.php',
-        'TillPayments\\Client\\Transaction\\Base\\ItemsTrait' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/ItemsTrait.php',
-        'TillPayments\\Client\\Transaction\\Base\\OffsiteInterface' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/OffsiteInterface.php',
-        'TillPayments\\Client\\Transaction\\Base\\OffsiteTrait' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/OffsiteTrait.php',
-        'TillPayments\\Client\\Transaction\\Base\\ScheduleInterface' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/ScheduleInterface.php',
-        'TillPayments\\Client\\Transaction\\Base\\ScheduleTrait' => __DIR__ . '/../../..' . '/classes/client/Transaction/Base/ScheduleTrait.php',
-        'TillPayments\\Client\\Transaction\\Capture' => __DIR__ . '/../../..' . '/classes/client/Transaction/Capture.php',
-        'TillPayments\\Client\\Transaction\\Debit' => __DIR__ . '/../../..' . '/classes/client/Transaction/Debit.php',
-        'TillPayments\\Client\\Transaction\\Deregister' => __DIR__ . '/../../..' . '/classes/client/Transaction/Deregister.php',
-        'TillPayments\\Client\\Transaction\\Error' => __DIR__ . '/../../..' . '/classes/client/Transaction/Error.php',
-        'TillPayments\\Client\\Transaction\\Payout' => __DIR__ . '/../../..' . '/classes/client/Transaction/Payout.php',
-        'TillPayments\\Client\\Transaction\\Preauthorize' => __DIR__ . '/../../..' . '/classes/client/Transaction/Preauthorize.php',
-        'TillPayments\\Client\\Transaction\\Refund' => __DIR__ . '/../../..' . '/classes/client/Transaction/Refund.php',
-        'TillPayments\\Client\\Transaction\\Register' => __DIR__ . '/../../..' . '/classes/client/Transaction/Register.php',
-        'TillPayments\\Client\\Transaction\\Result' => __DIR__ . '/../../..' . '/classes/client/Transaction/Result.php',
-        'TillPayments\\Client\\Transaction\\VoidTransaction' => __DIR__ . '/../../..' . '/classes/client/Transaction/VoidTransaction.php',
-        'TillPayments\\Client\\Xml\\Generator' => __DIR__ . '/../../..' . '/classes/client/Xml/Generator.php',
-        'TillPayments\\Client\\Xml\\Parser' => __DIR__ . '/../../..' . '/classes/client/Xml/Parser.php',
-        'Psr\\Log\\AbstractLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/AbstractLogger.php',
-        'Psr\\Log\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/log/Psr/Log/InvalidArgumentException.php',
-        'Psr\\Log\\LogLevel' => __DIR__ . '/..' . '/psr/log/Psr/Log/LogLevel.php',
-        'Psr\\Log\\LoggerAwareInterface' => __DIR__ . '/..' . '/psr/log/Psr/Log/LoggerAwareInterface.php',
-        'Psr\\Log\\LoggerAwareTrait' => __DIR__ . '/..' . '/psr/log/Psr/Log/LoggerAwareTrait.php',
-        'Psr\\Log\\LoggerInterface' => __DIR__ . '/..' . '/psr/log/Psr/Log/LoggerInterface.php',
-        'Psr\\Log\\LoggerTrait' => __DIR__ . '/..' . '/psr/log/Psr/Log/LoggerTrait.php',
-        'Psr\\Log\\NullLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/NullLogger.php',
-        'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
-        'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
-        'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9587173caabe23790103bf178b5a1d49c3540edbd68b1df48d0447c874511d41::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9587173caabe23790103bf178b5a1d49c3540edbd68b1df48d0447c874511d41::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9587173caabe23790103bf178b5a1d49c3540edbd68b1df48d0447c874511d41::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit31bc80146707b06a10e43a39d40e53a9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit31bc80146707b06a10e43a39d40e53a9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit31bc80146707b06a10e43a39d40e53a9::$classMap;
 
         }, null, ClassLoader::class);
     }
