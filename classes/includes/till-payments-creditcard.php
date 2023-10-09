@@ -598,6 +598,10 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
           0% { -webkit-transform: rotate(0deg); }
           100% { -webkit-transform: rotate(360deg); }
         }
+
+        .payment_box::before {
+			border: 0px !important;
+		}
         
         @keyframes spin {
           0% { transform: rotate(0deg); }
