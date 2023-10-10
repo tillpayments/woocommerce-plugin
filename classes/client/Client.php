@@ -38,7 +38,7 @@ use Psr\Log\LogLevel;
  */
 class Client {
 
-    const VERSION = '1.10.2';
+    const VERSION = '1.10.3';
     
     /**
      * The default url points to the Gateway

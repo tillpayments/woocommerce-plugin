@@ -814,13 +814,13 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
             'certificate' => [
                 'title' => 'ApplePay Certificate',
                 'type' => 'pemfile',
-                'description' => 'Certificate File (*.pem) provided by ApplePay',
+                'description' => 'Certificate File (*.pem) provided by TillPayments',
                 'default' => '',
             ],
             'private_key' => [
                 'title' => 'ApplePay Private Key',
                 'type' => 'pemfile',
-                'description' => 'Private Key File (*.pem) provided by ApplePay',
+                'description' => 'Private Key File (*.pem) provided by TillPayments',
                 'default' => '',
             ],
             'merchant_name' => [
