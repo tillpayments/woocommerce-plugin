@@ -35,9 +35,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         $this->logger = wc_get_logger();
 
         $this->id = TILL_PAYMENTS_EXTENSION_UID_PREFIX . $this->id;
-        $this->method_description = TILL_PAYMENTS_EXTENSION_NAME . ' ' . $this->method_title . ' payments.';
-		$this->icon = 'https://s3.ap-southeast-2.amazonaws.com/images.simplepays.io/visa_mastercard+(2).png';
-        $this->has_fields = isset($_GET['pay_for_order']);
+		$this->icon = TILL_PAYMENTS_EXTENSION_ASSETS . 'img/' . ($this->get_option('amexLogo') === 'yes' ?  'amex_visa_mc.svg' : 'visa_mc.svg');
 
         $this->init_form_fields();
         $this->init_settings();
@@ -54,7 +52,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('wp_enqueue_scripts', function () {
             wp_register_script('payment_js', $this->get_option('apiHost') . 'js/integrated/payment.1.3.min.js', [], TILL_PAYMENTS_EXTENSION_VERSION, false);
-            wp_register_script('till_payments_js_' . $this->id, plugins_url('/tillpayments/assets/js/till-payments.js'), [], TILL_PAYMENTS_EXTENSION_VERSION, false);
+            wp_register_script('till_payments_js_' . $this->id, TILL_PAYMENTS_EXTENSION_ASSETS . 'js/till-payments.js', [], TILL_PAYMENTS_EXTENSION_VERSION, false);
         }, 999);
         add_action('woocommerce_api_wc_' . $this->id, [$this, 'process_callback']);
         add_filter('script_loader_tag', function ($tag, $handle) {

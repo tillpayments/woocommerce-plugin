@@ -40,7 +40,7 @@ class WC_TillPayments_GooglePay extends WC_Payment_Gateway
 
         $this->id = TILL_PAYMENTS_EXTENSION_UID_PREFIX . $this->id;
         $this->method_description = TILL_PAYMENTS_EXTENSION_NAME . ' ' . $this->method_title . ' payments.';
-        $this->icon = plugins_url('/tillpayments/assets/img/google-pay-mark_800.svg');
+        $this->icon = TILL_PAYMENTS_EXTENSION_ASSETS . 'img/google-pay-mark_800.svg';
         $this->has_fields = true;
 
         $this->supports = array(
@@ -56,8 +56,8 @@ class WC_TillPayments_GooglePay extends WC_Payment_Gateway
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('wp_enqueue_scripts', function () {
-            wp_register_script('till_googlepay_js_' . $this->id, plugins_url('/tillpayments/assets/js/till-googlepay.js'), ['jquery'], TILL_PAYMENTS_EXTENSION_VERSION, false);
-            wp_register_script('till_googlepay_loader_js_' . $this->id, plugins_url('/tillpayments/assets/js/google-pay-loader.js'), ['jquery'], TILL_PAYMENTS_EXTENSION_VERSION, false);
+            wp_register_script('till_googlepay_js_' . $this->id, TILL_PAYMENTS_EXTENSION_ASSETS . 'js/till-googlepay.js', ['jquery'], TILL_PAYMENTS_EXTENSION_VERSION, false);
+            wp_register_script('till_googlepay_loader_js_' . $this->id, TILL_PAYMENTS_EXTENSION_ASSETS . 'js/google-pay-loader.js', ['jquery'], TILL_PAYMENTS_EXTENSION_VERSION, false);
         }, 999);
 
         add_action('woocommerce_api_wc_' . $this->id, [$this, 'process_callback']);

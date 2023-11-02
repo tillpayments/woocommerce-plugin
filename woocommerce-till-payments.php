@@ -19,6 +19,7 @@ define('TILL_PAYMENTS_EXTENSION_NAME', 'Till Payments');
 define('TILL_PAYMENTS_EXTENSION_VERSION', '1.10.3');
 define('TILL_PAYMENTS_EXTENSION_UID_PREFIX', 'till_payments_');
 define('TILL_PAYMENTS_EXTENSION_BASEDIR', plugin_dir_path(__FILE__));
+define('TILL_PAYMENTS_EXTENSION_ASSETS', plugins_url(plugin_basename(TILL_PAYMENTS_EXTENSION_BASEDIR) . '/assets/'));
 
 add_action('plugins_loaded', function () {
     require_once TILL_PAYMENTS_EXTENSION_BASEDIR . 'classes/includes/till-payments-provider.php';
