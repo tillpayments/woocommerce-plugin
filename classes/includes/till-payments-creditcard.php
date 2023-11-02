@@ -35,6 +35,16 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         $this->logger = wc_get_logger();
 
         $this->id = TILL_PAYMENTS_EXTENSION_UID_PREFIX . $this->id;
+        $testMessage = "<p><b>Test Mode Enabled:</b> Use a card number like 4111 1111 1111 1111 with any CVV and any future expiry date</i></p>";
+        $this->method_description = sprintf(
+            '<p>Till Payments Credit Card payments.</p>
+            <p>Refer to our <a href="%1$s" target="_blank">troubleshooting guide</a> if you encounter any issues, or contact support@tillpayments.com</p>
+            <p>Retrieve your credentials from the web gateway (<a href="https://gateway.tillpayments.com/en/login" target="_blank">production</a>, <a href="https://test-gateway.tillpayments.com/en/login" target="_blank">sandbox</a>)</p>
+            <p>%2$s</p>
+            ',
+            'https://github.com/tillpayments/woocommerce-plugin#common-user-errors',
+            $this->get_option('apiHost') === TILL_PAYMENTS_EXTENSION_URL_TEST ? $testMessage : false
+        );
 		$this->icon = TILL_PAYMENTS_EXTENSION_ASSETS . 'img/' . ($this->get_option('amexLogo') === 'yes' ?  'amex_visa_mc.svg' : 'visa_mc.svg');
 
         $this->init_form_fields();
@@ -503,19 +513,20 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
 
     public function init_form_fields()
     {
+        $connectorsDesc = 'Retrieved from <b>Connectors</b> section on the web gateway';
         $this->form_fields = [
             'title' => [
                 'title' => 'Title',
                 'type' => 'text',
                 'label' => 'Title',
-                'description' => 'Title',
+                'description' => 'The name of the payment method displayed at the checkout',
                 'default' => $this->method_title,
             ],
             'apiHost' => [
-                'title' => 'API Host',
+                'title' => 'Environment',
                 'type' => 'select',
                 'label' => 'Environment',
-                'description' => 'Environment',
+                'description' => 'Switch between LIVE and TEST mode',
                 'default' => TILL_PAYMENTS_EXTENSION_URL,
                 'options' => [
                     TILL_PAYMENTS_EXTENSION_URL_TEST => 'Test (Sandbox)',
@@ -526,47 +537,55 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
                 'title' => 'API User',
                 'type' => 'text',
                 'label' => 'API User',
-                'description' => 'API User',
+                'description' => 'Retrieved from <b>Users</b> section on the web gateway',
                 'default' => '',
             ],
             'apiPassword' => [
                 'title' => 'API Password',
                 'type' => 'password',
                 'label' => 'API Password',
-                'description' => 'API Password',
+                'description' => 'Set in the <b>Users</b> section on the web gateway',
                 'default' => '',
             ],
             'apiKey' => [
                 'title' => 'API Key',
                 'type' => 'password',
                 'label' => 'API Key',
-                'description' => 'API Key',
+                'description' => $connectorsDesc,
                 'default' => '',
             ],
             'sharedSecret' => [
                 'title' => 'Shared Secret',
                 'type' => 'password',
                 'label' => 'Shared Secret',
-                'description' => 'Shared Secret',
+                'description' => $connectorsDesc,
                 'default' => '',
             ],
             'integrationKey' => [
-                'title' => 'Integration Key',
+                'title' => 'Public Integration Key',
                 'type' => 'text',
-                'label' => 'Integration Key',
-                'description' => 'Integration Key',
+                'label' => 'Public Integration Key',
+                'description' => $connectorsDesc,
                 'default' => '',
             ],
             'transactionRequest' => [
-                'title' => 'Transaction Request',
+                'title' => 'Transaction Type',
                 'type' => 'select',
                 'label' => 'Transaction Request',
-                'description' => 'Transaction Request',
+                'description' => '<b>Debit:</b> a "normal" payment<br /><i>OR</i><br /><b>Preauthorize:</b> Reserves the payment amount on the customer\'s payment instrument.<br /> <b>Capture:</b> Completes a payment which was previously authorized with the Preauthorize method.',
                 'default' => 'debit',
                 'options' => [
                     'debit' => 'Debit',
                     'preauthorize' => 'Preauthorize/Capture',
                 ],
+            ],
+            'amexLogo' => [
+                'title' => 'AMEX Logo',
+                'label' => 'Display AMEX logo at checkout',
+                'type' => 'checkbox',
+                'description' => 'Display AMEX logo as an accepted card scheme on the checkout page',
+                'default' => 'no',
+                'desc_tip' => true,
             ],
         ];
     }
