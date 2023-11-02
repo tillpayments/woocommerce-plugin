@@ -624,6 +624,11 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
+        .payment_method_till_payments_creditcard img {
+            height: 48px;
+            display:inline-block;
+            vertical-align:middle
+        }
         </style>
         <div id="till_payments_errors"></div>
         <div class="payment_box" style="padding: 25px; background-color: #fff; border-radius: 3px; max-width: 450px; min-height: 385px">
