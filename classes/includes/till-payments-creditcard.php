@@ -46,6 +46,7 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
             $this->get_option('apiHost') === TILL_PAYMENTS_EXTENSION_URL_TEST ? $testMessage : false
         );
 		$this->icon = TILL_PAYMENTS_EXTENSION_ASSETS . 'img/' . ($this->get_option('amexLogo') === 'yes' ?  'amex_visa_mc.svg' : 'visa_mc.svg');
+        $this->has_fields = isset($_GET['pay_for_order']); // || $this->get_option('inlineCheckout') === 'yes';
 
         $this->init_form_fields();
         $this->init_settings();
@@ -57,7 +58,6 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
 
         $this->title = $this->get_option('title');
         $this->callbackUrl = add_query_arg('wc-api', 'wc_' . $this->id, home_url('/'));
-
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('wp_enqueue_scripts', function () {
