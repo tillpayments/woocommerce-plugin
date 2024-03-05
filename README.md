@@ -5,7 +5,7 @@ Tags: Credit Card, e-commerce, payment, processing, checkout\
 Requires Wordpress: 4.9\
 Tested up to Wordpress: 6.2\
 Requires Woocommerce: 3.6.0\
-Tested up to Woocommerce: 7.5.1\
+Tested up to Woocommerce: 8.5\
 Requires PHP: 7.2.5\
 Stable tag: 1.10.3
 
