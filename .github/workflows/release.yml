@@ -1,0 +1,29 @@
+name: Upload asset to Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  attach_artifacts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Archive Repository
+        run: |
+          mkdir tillpayments
+          rsync -av --exclude='tillpayments' --exclude='.git*' ./ tillpayments/
+          zip -r tillpayments.zip tillpayments
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: tillpayments.zip
+          asset_name: tillpayments.zip
+          asset_content_type: application/zip
