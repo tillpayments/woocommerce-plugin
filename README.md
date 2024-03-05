@@ -3,7 +3,7 @@
 Contributors: Till Payments\
 Tags: Credit Card, e-commerce, payment, processing, checkout\
 Requires Wordpress: 4.9\
-Tested up to Wordpress: 6.2\
+Tested up to Wordpress: 6.4\
 Requires Woocommerce: 3.6.0\
 Tested up to Woocommerce: 8.5\
 Requires PHP: 7.2.5\
@@ -26,8 +26,10 @@ Please refer to https://tillpayments.com/ for merchant sign-up and more info.
 
 ## Installation
 
-1. Upload the plugin files to the `/wp-content/plugins/tillpayments` directory, or install the plugin through the WordPress plugins screen directly.
-   (**IMPORTANT**: If uploaded via Wordpress please ensure the plugin is placed into the path above / named accordingly)
+Download **tillpayments.zip** from our [latest releases](https://github.com/tillpayments/woocommerce-plugin/releases/latest)
+
+1. Upload the plugin files to the `/wp-content/plugins/tillpayments` directory, or install the plugin through the WordPress plugins screen directly.  
+   ***If uploaded via Wordpress please ensure the plugin is placed into the path above / named accordingly***
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 ## Plugin Activation
