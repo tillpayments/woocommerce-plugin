@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Till Payments Extension
  * Description: Till Payments for WooCommerce
- * Version: 1.10.3
+ * Version: 1.10.4
  * Author: Till Payments
  */
 
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 define('TILL_PAYMENTS_EXTENSION_URL', 'https://gateway.tillpayments.com/');
 define('TILL_PAYMENTS_EXTENSION_URL_TEST', 'https://test-gateway.tillpayments.com/');
 define('TILL_PAYMENTS_EXTENSION_NAME', 'Till Payments');
-define('TILL_PAYMENTS_EXTENSION_VERSION', '1.10.3');
+define('TILL_PAYMENTS_EXTENSION_VERSION', '1.10.4');
 define('TILL_PAYMENTS_EXTENSION_UID_PREFIX', 'till_payments_');
 define('TILL_PAYMENTS_EXTENSION_BASEDIR', plugin_dir_path(__FILE__));
 
