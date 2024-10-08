@@ -611,7 +611,6 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
 
         $merchantIdCert = base64_decode($this->get_option('certificate'));
         $merchantIdKey = base64_decode($this->get_option('private_key'));
-        //$merchantIdKeyPassword = $this->get_option('private_key_password');
         if ($merchantIdCert === false) {
             $this->log('  > missing merchant certificate! Aborting.', WC_Log_Levels::ERROR);
             http_response_code(500);
@@ -630,11 +629,6 @@ class WC_TillPayments_ApplePay extends WC_Payment_Gateway
             $merchantIdKey = stream_get_meta_data($tempKeyFile)['uri'];
 
             $this->log('  > temporary cert and key files: '.$merchantIdCert.' / '.$merchantIdKey);
-        }
-
-        if (is_string($merchantIdKeyPassword) && strlen($merchantIdKeyPassword) > 0) {
-            $this->log('  > using private key decryption password');
-            $merchantIdKey = [$merchantIdKey, $merchantIdKeyPassword];
         }
 
         $requestBody = [
