@@ -44,7 +44,8 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
 
         $this->supports = array(
             'products',
-            'refunds'
+            'refunds',
+            'custom-gateway'
         );
 
         $this->title = $this->get_option('title');
@@ -100,15 +101,15 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
 
     public function hide_payment_gateways_on_pay_for_order_page($available_gateways)
     {
-        if (is_checkout_pay_page()) {
-            global $wp;
-            $this->order = new WC_Order($wp->query_vars['order-pay']);
-            foreach ($available_gateways as $gateways_id => $gateways) {
-                if ($gateways_id !== $this->order->get_payment_method()) {
-                    unset($available_gateways[$gateways_id]);
-                }
-            }
-        }
+        // if (is_checkout_pay_page()) {
+        //     global $wp;
+        //     $this->order = new WC_Order($wp->query_vars['order-pay']);
+        //     foreach ($available_gateways as $gateways_id => $gateways) {
+        //         if ($gateways_id !== $this->order->get_payment_method()) {
+        //             unset($available_gateways[$gateways_id]);
+        //         }
+        //     }
+        // }
 
         return $available_gateways;
     }
@@ -239,6 +240,13 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
          */
         if ($this->get_option('integrationKey')) {
             $token = !empty($this->get_post_data()['token']) ? $this->get_post_data()['token'] : null;
+            if (!$token) {
+                $this->log('Looking for token from block checkout in gateway ' . $this->id);
+                $payment_method_data = isset($_POST['payment_method_data']) ? $_POST['payment_method_data'] : array();
+                $token = isset($payment_method_data['token']) ? sanitize_text_field($payment_method_data['token']) : '';
+                $card_data_json = isset($payment_method_data['cardData']) ? $payment_method_data['cardData'] : '{}';
+                $card_data = json_decode($card_data_json, true);
+            }
             if (!$token) {
                 return [
                     'result' => 'success',
@@ -446,7 +454,8 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
         wc_add_notice(__('Payment failed or was declined', 'woocommerce'), 'error');
         return [
             'result' => 'error',
-            'redirect' => $this->get_return_url($this->order),
+            // 'redirect' => $this->get_return_url($this->order),
+            'redirect' => wc_get_checkout_url(),
         ];
     }
 
@@ -570,6 +579,19 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
                     'preauthorize' => 'Preauthorize/Capture',
                 ],
             ],
+            'description' => [
+                'title' => 'Checkout Message',
+                'type' => 'textarea',
+                'description' => 'You can display some text to your customers at the checkout page',
+                'default' => 'You may be redirected away from this page to complete 3D-Secure verification for your order',
+            ],
+            'amex_supported' => [
+                'title' => 'AMEX Accepted',
+                'type' => 'checkbox',
+                'label' => 'Show AMEX logo at checkout',
+                'description' => 'Do you want to show this logo?',
+                'default' => 'no'
+            ]
         ];
     }
 

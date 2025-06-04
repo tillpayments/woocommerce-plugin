@@ -1,0 +1,32 @@
+/* div #till_ccn_div,
+#till_cvv_div {
+    height: 28px;
+    margin-bottom: 4px;
+} */
+
+#till_cardholder,
+#till_expirydate,
+#till_cardholder {
+    font-weight: 600;
+    width: 200px;
+    padding: 4px;
+    font-size: 16px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    border: '1px inset rgb(118, 118, 118)';
+    font-family: 'Arial';
+}
+
+#till_expirydate {
+    width: 75px !important;
+}
+
+
+.container {
+    display: flex;
+    gap: 5px;
+}
+
+.box {
+    flex: 1 1 50%;
+}

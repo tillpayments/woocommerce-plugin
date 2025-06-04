@@ -2,12 +2,12 @@
 
 Contributors: Till Payments\
 Tags: Credit Card, e-commerce, payment, processing, checkout\
-Requires Wordpress: 4.9\
-Tested up to Wordpress: 6.4\
-Requires Woocommerce: 3.6.0\
-Tested up to Woocommerce: 8.5\
+Requires Wordpress: 6.6\
+Tested up to Wordpress: 6.8\
+Requires Woocommerce: 9.8.0\
+Tested up to Woocommerce: 9.8\
 Requires PHP: 7.2.5\
-Stable tag: 1.10.4
+Stable tag: 1.11.0
 
 ## Description
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Till Payments Extension
  * Description: Till Payments for WooCommerce
- * Version: 1.10.4
+ * Version: 1.11.0
  * Author: Till Payments
  */
 
@@ -172,3 +172,110 @@ add_action('plugins_loaded', function () {
         wp_send_json(['error' => 1, 'msg' => 'Capture request failed!']);
     });
 });
+
+add_action( 'woocommerce_blocks_loaded', 'till_gateway_block_support' );
+function till_gateway_block_support() {
+
+	// if( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+	// 	return;
+	// }
+
+	// here we're including our "gateway block support class"
+	require_once __DIR__ . '/classes/includes/till-payments-blocks-support.php';
+
+	// registering the PHP class we have just included
+	add_action(
+		'woocommerce_blocks_payment_method_type_registration',
+		function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+			$payment_method_registry->register( new WC_Till_Gateway_Blocks_Support );
+		}
+	);
+
+}
+
+add_action( 'before_woocommerce_init', 'till_cart_checkout_blocks_compatibility' );
+
+function till_cart_checkout_blocks_compatibility() {
+
+    if( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+				'cart_checkout_blocks',
+				__FILE__,
+				true
+			);
+    }
+		
+}
+
+/**
+ * Ensure payment.js script is loaded at checkout and pointing to the correct host
+ */
+function enqueue_till_payments_script() {
+    if ( is_checkout() ) {
+        // Get your plugin settings
+        $settings = get_option('woocommerce_till_payments_creditcard_settings', array());
+        
+        // Get the apiHost setting
+        $api_host = isset($settings['apiHost']) ? $settings['apiHost'] : '';
+        
+        // Check if apiHost contains 'test' (case-insensitive)
+        $is_test_mode = stripos($api_host, 'test') !== false;
+        
+        // Set script URL based on test mode
+        $script_url = $is_test_mode 
+            ? 'https://test-gateway.tillpayments.com/js/integrated/payment.1.3.min.js'
+            : 'https://gateway.tillpayments.com/js/integrated/payment.1.3.min.js';
+        
+        wp_enqueue_script(
+            'till-payments-js',
+            $script_url,
+            [],
+            null,
+            true
+        );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'enqueue_till_payments_script' );
+
+function add_data_main_attribute( $tag, $handle, $src ) {
+    if ( 'till-payments-js' === $handle ) {
+        $tag = str_replace( '<script ', '<script data-main="payment-js" ', $tag );
+    }
+    return $tag;
+}
+add_filter( 'script_loader_tag', 'add_data_main_attribute', 10, 3 );
+
+function my_plugin_enqueue_assets() {
+    if ( is_checkout() ) { // or other conditional you need
+        wp_enqueue_style(
+            'my-plugin-style', // handle
+            plugin_dir_url( __FILE__ ) . 'build/style-index.css', // URL to CSS file
+            [], // dependencies
+            filemtime( plugin_dir_path( __FILE__ ) . 'build/style-index.css' ) // version based on file modification time for cache busting
+        );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'my_plugin_enqueue_assets' );
+
+
+
+// ensure block checkout allows my validate function to run 
+add_filter(
+    'woocommerce_blocks_payment_method_type_registration_data',
+    'till_payments_creditcard_block_registration_data',
+    10,
+    2
+);
+
+function till_payments_creditcard_block_registration_data( $data, $gateway_id ) {
+    if ( 'till_payments_creditcard' === $gateway_id ) {
+        $gateway = new WC_TillPayments_CreditCard();
+        $data['title']       = $gateway->get_option('title');
+        $data['description'] = $gateway->get_option('description');
+        $data['supports']    = $gateway->supports;
+        $data['icon']        = $gateway->get_icon();
+        return $data;
+    }
+
+    return $data;
+}
