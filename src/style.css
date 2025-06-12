@@ -7,26 +7,44 @@
 #till_cardholder,
 #till_expirydate,
 #till_cardholder {
-    font-weight: 600;
-    width: 200px;
-    padding: 4px;
-    font-size: 16px;
-    margin-bottom: 4px;
-    border-radius: 4px;
-    border: '1px inset rgb(118, 118, 118)';
-    font-family: 'Arial';
+  font-weight: 600;
+  width: 200px;
+  padding: 4px;
+  font-size: 16px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  border: "1px inset rgb(118, 118, 118)";
+  font-family: "Arial";
 }
 
 #till_expirydate {
-    width: 75px !important;
+  width: 75px !important;
 }
 
-
 .container {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 .box {
-    flex: 1 1 50%;
+  flex: 1 1 50%;
+}
+
+.test-mode-warning {
+  background-color: #fffbdd;
+  border-left: 4px solid #ffc107;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #856404;
+}
+
+.inline-container {
+  display: inline-flex;
+  width: 100%;
+  gap: 5px;
+}
+
+.half-width {
+  width: 50%;
 }
