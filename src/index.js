@@ -34,6 +34,13 @@ const FormInputText = ({ label, id, value, onChange }) => {
   );
 };
 
+const Spinner = () => (
+  <div className="spinner-container">
+    <div className="spinner" />
+    <p>Loading card payment fields ...</p>
+  </div>
+);
+
 const label = decodeEntities(settings.title);
 
 const Content = (props) => {
@@ -42,6 +49,7 @@ const Content = (props) => {
   const [paymentJsLoaded, setPaymentJsLoaded] = useState(
     window.PaymentJs === undefined
   );
+  const [paymentJsInitialised, setPaymentJsInitialised] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const maxRetry = 3;
   const formRef = useRef(null);
@@ -59,14 +67,12 @@ const Content = (props) => {
         "font-size": blockStyle.fontSize,
         "font-weight": blockStyle.fontWeight,
         border: blockStyle.border,
-        width: blockStyle.width,
-        border: blockStyle.border,
+        // width: blockStyle.width, // adopt from iframe wrapper container
         "border-radius": blockStyle.borderRadius,
         padding: blockStyle.padding,
         margin: blockStyle.margin,
+        color: blockStyle.color,
       };
-
-      const { width, ...cvvStyle } = baseStyle;
 
       document.getElementById(ccnDivId).style.height = blockStyle.height;
       document.getElementById(cvvDivId).style.height = blockStyle.height;
@@ -78,7 +84,7 @@ const Content = (props) => {
         cvvDivId,
         function (payment) {
           payment.setNumberStyle(baseStyle);
-          payment.setCvvStyle(cvvStyle);
+          payment.setCvvStyle(baseStyle);
           payment.setNumberPlaceholder("Card number");
           payment.setCvvPlaceholder("CVC");
           payment.numberOn("blur", function (data) {
@@ -91,18 +97,26 @@ const Content = (props) => {
               payment.setNumberStyle(baseStyle);
             }
           });
+
+          //   console.log(`payment #2: ${JSON.stringify(payment)}`);
+
+          setPaymentJsInitialised(payment.initialized);
+          //   console.log(`payment.js initialised ${payment.initialized}`);
+        },
+        function (error) {
+          console.log(`Error with Initialising Payment.js ${error}`);
         }
       );
     } else {
       if (retryCount < maxRetry) {
-        console.warn("payment.js was not found");
+        console.error("payment.js was not found");
         const timer = setTimeout(() => {
           setRetryCount((prev) => prev + 1);
         }, 1000);
 
         return () => clearTimeout(timer);
       } else {
-        console.warn(`Failed to load payment.js after ${retryCount} attempts`);
+        console.error(`Failed to load payment.js after ${retryCount} attempts`);
       }
     }
   }, [paymentJsLoaded, retryCount]);
@@ -186,12 +200,20 @@ const Content = (props) => {
     }
   };
 
+  //   paymentJsInitialised currently reliant on #till_inline_checkout_form initialising payment.js
+  //   to be decoupled
   return (
     <div className="wc-block-components-form">
       <p>{settings.description}</p>
       <TestModeWarning />
 
-      <form ref={formRef} id="till_inline_checkout_form">
+      {!paymentJsInitialised ? <Spinner /> : <></>}
+
+      <form
+        ref={formRef}
+        id="till_inline_checkout_form"
+        className={paymentJsInitialised ? "" : "hidden"}
+      >
         <div>
           <div id={ccnDivId} className="wc-block-components-text-input"></div>
         </div>
