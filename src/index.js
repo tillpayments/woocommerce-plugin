@@ -18,12 +18,8 @@ let cardDataG = {};
 const FormInputText = ({ label, id, value, onChange }) => {
   return (
     <div className="wc-block-components-text-input">
-      {/* <label className="wc-block-components-text-input__label" htmlFor={id}>
-				{label}
-			</label> */}
       <input
         type="text"
-        // className="wc-block-components-text-input__input"
         id={id}
         name={id}
         value={value}
@@ -53,6 +49,8 @@ const Content = (props) => {
   const [retryCount, setRetryCount] = useState(0);
   const maxRetry = 3;
   const formRef = useRef(null);
+  const [expiry, setExpiry] = useState("");
+  const [expiryError, setExpiryError] = useState("");
 
   useEffect(() => {
     if (window.PaymentJs && formRef) {
@@ -92,19 +90,23 @@ const Content = (props) => {
               payment.setNumberStyle({ ...baseStyle, "border-color": "red" });
             }
           });
+          payment.numberOn("focus", function (data) {
+            // console.log(data);
+            // console.log(`baseStyle: ${JSON.stringify(baseStyle)}`);
+            payment.setNumberStyle(baseStyle);
+          });
           payment.numberOn("input", function (data) {
+            // console.log(data);
+
             if (data.validNumber) {
               payment.setNumberStyle(baseStyle);
             }
           });
 
-          //   console.log(`payment #2: ${JSON.stringify(payment)}`);
-
           setPaymentJsInitialised(payment.initialized);
-          //   console.log(`payment.js initialised ${payment.initialized}`);
         },
         function (error) {
-          console.log(`Error with Initialising Payment.js ${error}`);
+          console.error(`Error with Initialising Payment.js ${error}`);
         }
       );
     } else {
@@ -125,7 +127,7 @@ const Content = (props) => {
   useEffect(() => {
     const unsubscribeValidation = onCheckoutValidation(() => {
       return new Promise((resolve) => {
-        let expiryValue = document.getElementById(expiryDateInput)?.value;
+        const expiryValue = expiry;
         let cardholderValue = document.getElementById(cardholderInput)?.value;
 
         if (!expiryValue || !cardholderValue) {
@@ -137,6 +139,7 @@ const Content = (props) => {
         }
 
         let [month, year] = expiryValue.split("/");
+
         let data = {
           card_holder: cardholderValue,
           month: month,
@@ -220,12 +223,20 @@ const Content = (props) => {
 
         <div className="inline-container">
           <div className="half-width">
-            <ExpiryDateInput />
+            <ExpiryDateInput
+              expiry={expiry}
+              setExpiry={setExpiry}
+              setExpiryError={setExpiryError}
+            />
           </div>
           <div id="half-container-cvv" className="half-width">
             <div id={cvvDivId} className="wc-block-components-text-input"></div>
           </div>
         </div>
+
+        {expiryError && (
+          <div className="field-error-message">{expiryError}</div>
+        )}
 
         <FormInputText
           label="Name on card"
@@ -255,29 +266,53 @@ const Label = (props) => {
   return <PaymentMethodLabel text={label} icon={<Icon />} />;
 };
 
-const ExpiryDateInput = () => {
-  const [expiry, setExpiry] = useState("");
-
+const ExpiryDateInput = ({ expiry, setExpiry, setExpiryError }) => {
   const handleChange = (e) => {
-    let value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    let value = e.target.value.replace(/\D/g, "");
 
     if (value.length > 4) value = value.slice(0, 4);
-
     if (value.length > 2) {
       value = value.slice(0, 2) + "/" + value.slice(2);
     }
 
     setExpiry(value);
+    setExpiryError("");
+  };
+
+  const handleBlur = () => {
+    const [monthStr, yearStr] = expiry.split("/");
+    const month = parseInt(monthStr, 10);
+    const year = parseInt(yearStr, 10);
+
+    const isValidFormat = /^\d{2}\/\d{2}$/.test(expiry);
+    const isValidMonth = month >= 1 && month <= 12;
+    const isValidYear = !isNaN(year);
+
+    if (!isValidFormat || !isValidMonth || !isValidYear) {
+      setExpiryError("Please enter a valid expiry date in MM/YY format");
+      return;
+    }
+
+    const now = new Date();
+    const currentYear = parseInt(now.getFullYear().toString().slice(-2), 10);
+    const currentMonth = now.getMonth() + 1;
+
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      setExpiryError("Expiry date is in the past");
+      return;
+    }
+
+    setExpiryError("");
   };
 
   return (
     <div className="wc-block-components-text-input">
       <input
         type="text"
-        // className="wc-block-components-text-input__input"
         id={expiryDateInput}
         value={expiry}
         onChange={handleChange}
+        onBlur={handleBlur}
         placeholder="MM / YY"
         maxLength={5} // 4 digits + 1 slash
       />
