@@ -51,6 +51,8 @@ const Content = (props) => {
   const formRef = useRef(null);
   const [expiry, setExpiry] = useState("");
   const [expiryError, setExpiryError] = useState("");
+  const [cardInputError, setCardInputError] = useState("");
+  const [cvvError, setCvvError] = useState("");
 
   useEffect(() => {
     if (window.PaymentJs && formRef) {
@@ -85,21 +87,34 @@ const Content = (props) => {
           payment.setCvvStyle(baseStyle);
           payment.setNumberPlaceholder("Card number");
           payment.setCvvPlaceholder("CVC");
+
+          // card number
           payment.numberOn("blur", function (data) {
+            // console.log(data);
+            setCardInputError("");
+
             if (!data.validNumber) {
               payment.setNumberStyle({ ...baseStyle, "border-color": "red" });
+              setCardInputError("The card number entered is not valid");
             }
           });
           payment.numberOn("focus", function (data) {
-            // console.log(data);
-            // console.log(`baseStyle: ${JSON.stringify(baseStyle)}`);
             payment.setNumberStyle(baseStyle);
           });
           payment.numberOn("input", function (data) {
-            // console.log(data);
-
             if (data.validNumber) {
               payment.setNumberStyle(baseStyle);
+            }
+          });
+
+          // cvv
+          payment.cvvOn("blur", function (data) {
+            // console.log(data);
+            setCvvError("");
+
+            if (!data.validCvv) {
+              payment.setCvvStyle({ ...baseStyle, "border-color": "red" });
+              setCvvError("The CVV / CVC entered is not valid");
             }
           });
 
@@ -221,6 +236,10 @@ const Content = (props) => {
           <div id={ccnDivId} className="wc-block-components-text-input"></div>
         </div>
 
+        {cardInputError && (
+          <div className="field-error-message">{cardInputError}</div>
+        )}
+
         <div className="inline-container">
           <div className="half-width">
             <ExpiryDateInput
@@ -237,6 +256,8 @@ const Content = (props) => {
         {expiryError && (
           <div className="field-error-message">{expiryError}</div>
         )}
+
+        {cvvError && <div className="field-error-message">{cvvError}</div>}
 
         <FormInputText
           label="Name on card"
