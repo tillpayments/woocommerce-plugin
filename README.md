@@ -66,7 +66,7 @@ This is because there is a setup phase for each of these payment options + requi
 
 #### Setup
 
-- Please email Till Integrations (integrations@tillpayments.com) for Applepay enablement.
+- Please email Till Integrations (integrations-anz@nuvei.com) for Applepay enablement.
 - Certificate files will be provided for you to upload (via the plugin)
 - This includes a domain association file which needs to be uploaded to your server's file path **https://[DOMAIN_NAME]/.well-known/apple-developer-merchantid-domain-association**
 - Once all files have been uploaded Till support engineers will invoke enablement of your setup with Apple
