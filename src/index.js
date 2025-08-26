@@ -1,252 +1,355 @@
-import { useEffect, useRef, useState } from '@wordpress/element';
-import { decodeEntities } from '@wordpress/html-entities';
-import './style.css';
+import { useEffect, useRef, useState } from "@wordpress/element";
+import { decodeEntities } from "@wordpress/html-entities";
+import "./style.css";
 
-const { registerPaymentMethod } = window.wc.wcBlocksRegistry
-const { getSetting } = window.wc.wcSettings
+const { registerPaymentMethod } = window.wc.wcBlocksRegistry;
+const { getSetting } = window.wc.wcSettings;
 
-const settings = getSetting('till_payments_creditcard_data', {})
-const ccnDivId = 'till_ccn_div';
-const cvvDivId = 'till_cvv_div';
-const cardholderInput = 'till_cardholder_name_input';
-const expiryDateInput = 'till_expiry_date_input'
+const settings = getSetting("till_payments_creditcard_data", {});
+const ccnDivId = "till_ccn_div";
+const cvvDivId = "till_cvv_div";
+const cardholderInput = "till_cardholder_name_input";
+const expiryDateInput = "till_expiry_date_input";
 
 let payment = null;
-let tokenG = '';
+let tokenG = "";
 let cardDataG = {};
 
 const FormInputText = ({ label, id, value, onChange }) => {
-	return (
-		<div className="wc-block-components-text-input">
-			{/* <label className="wc-block-components-text-input__label" htmlFor={id}>
-				{label}
-			</label> */}
-			<input
-				type="text"
-				className="wc-block-components-text-input__input"
-				id={id}
-				name={id}
-				value={value}
-				onChange={onChange}
-				placeholder={label}
-			/>
-		</div>
-	);
+  return (
+    <div className="wc-block-components-text-input">
+      <input
+        type="text"
+        id={id}
+        name={id}
+        value={value}
+        onChange={onChange}
+        placeholder={label}
+      />
+    </div>
+  );
 };
 
-const label = decodeEntities(settings.title)
+const Spinner = () => (
+  <div className="spinner-container">
+    <div className="spinner" />
+    <p>Loading card payment fields ...</p>
+  </div>
+);
+
+const label = decodeEntities(settings.title);
 
 const Content = (props) => {
-	const { eventRegistration, emitResponse } = props;
-	const { onPaymentSetup, onCheckoutValidation } = eventRegistration;
-	const [paymentJsLoaded, setPaymentJsLoaded] = useState(window.PaymentJs === undefined);
-	const [retryCount, setRetryCount] = useState(0);
-	const maxRetry = 3;
-	const formRef = useRef(null);
+  const { eventRegistration, emitResponse } = props;
+  const { onPaymentSetup, onCheckoutValidation } = eventRegistration;
+  const [paymentJsLoaded, setPaymentJsLoaded] = useState(
+    window.PaymentJs === undefined
+  );
+  const [paymentJsInitialised, setPaymentJsInitialised] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetry = 3;
+  const formRef = useRef(null);
+  const [expiry, setExpiry] = useState("");
+  const [expiryError, setExpiryError] = useState("");
+  const [cardInputError, setCardInputError] = useState("");
+  const [cvvError, setCvvError] = useState("");
 
-	useEffect(() => {
-		if (window.PaymentJs && formRef) {
-			const el = document.getElementById(cardholderInput);
-			const blockStyle = window.getComputedStyle(el);
+  useEffect(() => {
+    if (window.PaymentJs && formRef) {
+      const el = document.getElementById(cardholderInput);
+      const blockStyle = window.getComputedStyle(el);
 
-			const baseStyle = {
-				'background-color': blockStyle.backgroundColor,
-				'height': blockStyle.height,
-				'max-height': blockStyle.maxHeight,
-				'font-family': blockStyle.fontFamily,
-				'font-size': blockStyle.fontSize,
-				'font-weight': blockStyle.fontWeight,
-				'border': blockStyle.border,
-				'width': blockStyle.width,
-				'border': blockStyle.border,
-				'border-radius': blockStyle.borderRadius,
-				'padding': blockStyle.padding,
-				'margin': blockStyle.margin,
+      const baseStyle = {
+        "background-color": blockStyle.backgroundColor,
+        height: blockStyle.height,
+        "max-height": blockStyle.maxHeight,
+        "font-family": blockStyle.fontFamily,
+        "font-size": blockStyle.fontSize,
+        "font-weight": blockStyle.fontWeight,
+        border: blockStyle.border,
+        // width: blockStyle.width, // adopt from iframe wrapper container
+        "border-radius": blockStyle.borderRadius,
+        padding: blockStyle.padding,
+        margin: blockStyle.margin,
+        color: blockStyle.color,
+      };
 
-			}
+      document.getElementById(ccnDivId).style.height = blockStyle.height;
+      document.getElementById(cvvDivId).style.height = blockStyle.height;
 
-			document.getElementById(ccnDivId).style.height = blockStyle.height
-			document.getElementById(cvvDivId).style.height = blockStyle.height
-			// const cvvWidth = parseFloat(window.getComputedStyle(document.getElementById('cvv_expiry_container')).width)/2
-			// document.getElementById(cvvDivId).style.width = cvvWidth
-			// console.log(cvvWidth)
+      payment = new window.PaymentJs();
+      payment.init(
+        settings.integrationKey,
+        ccnDivId,
+        cvvDivId,
+        function (payment) {
+          payment.setNumberStyle(baseStyle);
+          payment.setCvvStyle(baseStyle);
+          payment.setNumberPlaceholder("Card number");
+          payment.setCvvPlaceholder("CVC");
 
-			payment = new window.PaymentJs();
-			payment.init(settings.integrationKey, ccnDivId, cvvDivId, function (payment) {
-				payment.setNumberStyle(baseStyle);
-				payment.setCvvStyle(baseStyle);
-				payment.setNumberPlaceholder('Card number');
-				payment.setCvvPlaceholder('CVV/CVC');
-				payment.numberOn('blur', function (data) {
-					if (!data.validNumber) {
-						payment.setNumberStyle({ ...baseStyle, 'border-color': 'red' });
-					}
-				})
-				payment.numberOn('input', function (data) {
-					if (data.validNumber) {
-						payment.setNumberStyle(baseStyle);
-					}
-				})
-			})
-		} else {
-			if (retryCount < maxRetry) {
-				console.warn("payment.js was not found")
-				const timer = setTimeout(() => {
-					setRetryCount((prev) => prev + 1);
-				}, 1000);
+          // card number
+          payment.numberOn("blur", function (data) {
+            // console.log(data);
+            setCardInputError("");
 
-				return () => clearTimeout(timer);
-			} else {
-				console.warn(`Failed to load payment.js after ${retryCount} attempts`)
-			}
-		}
-	}, [paymentJsLoaded, retryCount]);
+            if (!data.validNumber) {
+              payment.setNumberStyle({ ...baseStyle, "border-color": "red" });
+              setCardInputError("The card number entered is not valid");
+            }
+          });
+          payment.numberOn("focus", function (data) {
+            payment.setNumberStyle(baseStyle);
+          });
+          payment.numberOn("input", function (data) {
+            if (data.validNumber) {
+              payment.setNumberStyle(baseStyle);
+            }
+          });
 
-	// Register validation and payment setup hooks
-	useEffect(() => {
-		const unsubscribeValidation = onCheckoutValidation(() => {
-			return new Promise((resolve) => {
-				let expiryValue = document.getElementById(expiryDateInput)?.value;
-				let cardholderValue = document.getElementById(cardholderInput)?.value;
+          // cvv
+          payment.cvvOn("blur", function (data) {
+            // console.log(data);
+            setCvvError("");
 
-				if (!expiryValue || !cardholderValue) {
-					resolve({
-						type: emitResponse.responseTypes.ERROR,
-						errorMessage: 'Please fill in all required fields.',
-					});
-					return;
-				}
+            if (!data.validCvv) {
+              payment.setCvvStyle({ ...baseStyle, "border-color": "red" });
+              setCvvError("The CVV / CVC entered is not valid");
+            }
+          });
 
-				let [month, year] = expiryValue.split('/');
-				let data = {
-					card_holder: cardholderValue,
-					month: month,
-					year: year
-				}
+          setPaymentJsInitialised(payment.initialized);
+        },
+        function (error) {
+          console.error(`Error with Initialising Payment.js ${error}`);
+        }
+      );
+    } else {
+      if (retryCount < maxRetry) {
+        console.error("payment.js was not found");
+        const timer = setTimeout(() => {
+          setRetryCount((prev) => prev + 1);
+        }, 1000);
 
-				payment.tokenize(data,
-					//success callback
-					(token, cardData) => {
-						if (token) {
-							tokenG = token;
-							cardDataG = cardData;
-							resolve({
-								type: emitResponse.responseTypes.SUCCESS,
-							});
-						}
-					},
-					// failure callback
-					(errors) => {
-						resolve({
-							type: emitResponse.responseTypes.ERROR,
-							errorMessage: errors[0]?.message || 'Card validation failed',
-						});
-					}
-				)
-			});
-		});
+        return () => clearTimeout(timer);
+      } else {
+        console.error(`Failed to load payment.js after ${retryCount} attempts`);
+      }
+    }
+  }, [paymentJsLoaded, retryCount]);
 
-		const unsubscribePaymentSetup = onPaymentSetup(() => {
-			return {
-				type: emitResponse.responseTypes.SUCCESS,
-				meta: {
-					paymentMethodData: {
-						token: tokenG,
-						cardData: JSON.stringify(cardDataG)
-					}
-				}
-			};
-		});
+  // Register validation and payment setup hooks
+  useEffect(() => {
+    const unsubscribeValidation = onCheckoutValidation(() => {
+      return new Promise((resolve) => {
+        const expiryValue = expiry;
+        let cardholderValue = document.getElementById(cardholderInput)?.value;
 
-		return () => {
-			unsubscribeValidation();
-			unsubscribePaymentSetup();
-		};
-	}, [onPaymentSetup, onCheckoutValidation, emitResponse]);
+        if (!expiryValue || !cardholderValue) {
+          resolve({
+            type: emitResponse.responseTypes.ERROR,
+            errorMessage: "Please fill in all required fields.",
+          });
+          return;
+        }
 
-	const TestModeWarning = () => {
-		if (settings.testMode === true) {
-			return (
-				<p>
-					<strong>Test mode</strong> is enabled. Use one of the test cards listed in our <a href='https://test-gateway.tillpayments.com/documentation/connectors#simulator-testing-connector-test-data-extended-3d-secure-testing'>documentation</a>
-				</p>
-			)
-		} else {
-			return <></>
-		}
-	}
+        let [month, year] = expiryValue.split("/");
 
-	return (
-		<div className='wc-block-components-form'>
-			<p>{settings.description}</p>
-			<TestModeWarning />
-			<form ref={formRef} id='till_inline_checkout_form'>
-				<div>
-					<div id={ccnDivId} className='wc-block-components-text-input'></div>
-				</div>
+        let data = {
+          card_holder: cardholderValue,
+          month: month,
+          year: year,
+        };
 
-				<FormInputText label="Cardholder" id={cardholderInput} name={cardholderInput} onChange={null} />
+        payment.tokenize(
+          data,
+          //success callback
+          (token, cardData) => {
+            if (token) {
+              tokenG = token;
+              cardDataG = cardData;
+              resolve({
+                type: emitResponse.responseTypes.SUCCESS,
+              });
+            }
+          },
+          // failure callback
+          (errors) => {
+            resolve({
+              type: emitResponse.responseTypes.ERROR,
+              errorMessage: errors[0]?.message || "Card validation failed",
+            });
+          }
+        );
+      });
+    });
 
-				{/* <div className='container' id='cvv_expiry_container'>
-				</div> */}
-				<div id={cvvDivId} className='wc-block-components-text-input box'></div>
-				<ExpiryDateInput />
+    const unsubscribePaymentSetup = onPaymentSetup(() => {
+      return {
+        type: emitResponse.responseTypes.SUCCESS,
+        meta: {
+          paymentMethodData: {
+            token: tokenG,
+            cardData: JSON.stringify(cardDataG),
+          },
+        },
+      };
+    });
 
-			</form>
-		</div>
-	)
-}
+    return () => {
+      unsubscribeValidation();
+      unsubscribePaymentSetup();
+    };
+  }, [onPaymentSetup, onCheckoutValidation, emitResponse]);
+
+  const TestModeWarning = () => {
+    if (settings.testMode === true) {
+      return (
+        <p className="test-mode-warning">
+          <strong>Test mode</strong> is enabled. Use one of the test cards
+          listed in our{" "}
+          <a href="https://test-gateway.tillpayments.com/documentation/connectors#simulator-testing-connector-test-data-extended-3d-secure-testing">
+            documentation
+          </a>
+        </p>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  //   paymentJsInitialised currently reliant on #till_inline_checkout_form initialising payment.js
+  //   to be decoupled
+  return (
+    <div className="wc-block-components-form">
+      <p>{settings.description}</p>
+      <TestModeWarning />
+
+      {!paymentJsInitialised ? <Spinner /> : <></>}
+
+      <form
+        ref={formRef}
+        id="till_inline_checkout_form"
+        className={paymentJsInitialised ? "" : "hidden"}
+      >
+        <div>
+          <div id={ccnDivId} className="wc-block-components-text-input"></div>
+        </div>
+
+        {cardInputError && (
+          <div className="field-error-message">{cardInputError}</div>
+        )}
+
+        <div className="inline-container">
+          <div className="half-width">
+            <ExpiryDateInput
+              expiry={expiry}
+              setExpiry={setExpiry}
+              setExpiryError={setExpiryError}
+            />
+          </div>
+          <div id="half-container-cvv" className="half-width">
+            <div id={cvvDivId} className="wc-block-components-text-input"></div>
+          </div>
+        </div>
+
+        {expiryError && (
+          <div className="field-error-message">{expiryError}</div>
+        )}
+
+        {cvvError && <div className="field-error-message">{cvvError}</div>}
+
+        <FormInputText
+          label="Name on card"
+          id={cardholderInput}
+          name={cardholderInput}
+          onChange={null}
+          isIframeField={true}
+        />
+      </form>
+    </div>
+  );
+};
 
 const Icon = () => {
-	return settings.icon
-		? <img src={settings.icon} style={{ float: 'right', marginLeft: '20px', minHeight: '32px' }} />
-		: ''
-}
+  return settings.icon ? (
+    <img
+      src={settings.icon}
+      style={{ float: "right", marginLeft: "20px", minHeight: "32px" }}
+    />
+  ) : (
+    ""
+  );
+};
 
 const Label = (props) => {
-	const { PaymentMethodLabel } = props.components
-	return <PaymentMethodLabel text={label} icon={<Icon />} />
-}
+  const { PaymentMethodLabel } = props.components;
+  return <PaymentMethodLabel text={label} icon={<Icon />} />;
+};
 
-const ExpiryDateInput = () => {
-	const [expiry, setExpiry] = useState('');
+const ExpiryDateInput = ({ expiry, setExpiry, setExpiryError }) => {
+  const handleChange = (e) => {
+    let value = e.target.value.replace(/\D/g, "");
 
-	const handleChange = (e) => {
-		let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    if (value.length > 4) value = value.slice(0, 4);
+    if (value.length > 2) {
+      value = value.slice(0, 2) + "/" + value.slice(2);
+    }
 
-		if (value.length > 4) value = value.slice(0, 4);
+    setExpiry(value);
+    setExpiryError("");
+  };
 
-		if (value.length > 2) {
-			value = value.slice(0, 2) + '/' + value.slice(2);
-		}
+  const handleBlur = () => {
+    const [monthStr, yearStr] = expiry.split("/");
+    const month = parseInt(monthStr, 10);
+    const year = parseInt(yearStr, 10);
 
-		setExpiry(value);
-	};
+    const isValidFormat = /^\d{2}\/\d{2}$/.test(expiry);
+    const isValidMonth = month >= 1 && month <= 12;
+    const isValidYear = !isNaN(year);
 
-	return (
-		<div className='wc-block-components-text-input'>
-			<input
-				type="text"
-				className='wc-block-components-text-input__input'
-				id={expiryDateInput}
-				value={expiry}
-				onChange={handleChange}
-				placeholder="MM/YY"
-				maxLength={5} // 4 digits + 1 slash
-			/>
-		</div>
-	);
+    if (!isValidFormat || !isValidMonth || !isValidYear) {
+      setExpiryError("Please enter a valid expiry date in MM/YY format");
+      return;
+    }
+
+    const now = new Date();
+    const currentYear = parseInt(now.getFullYear().toString().slice(-2), 10);
+    const currentMonth = now.getMonth() + 1;
+
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      setExpiryError("Expiry date is in the past");
+      return;
+    }
+
+    setExpiryError("");
+  };
+
+  return (
+    <div className="wc-block-components-text-input">
+      <input
+        type="text"
+        id={expiryDateInput}
+        value={expiry}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder="MM / YY"
+        maxLength={5} // 4 digits + 1 slash
+      />
+    </div>
+  );
 };
 
 registerPaymentMethod({
-	name: "till_payments_creditcard",
-	paymentMethodId: "till_payments_creditcard",
-	label: <Label />,
-	content: <Content />,
-	edit: <Content />,
-	canMakePayment: () => true,
-	ariaLabel: label ? label : 'payment form',
-	supports: {
-		features: settings.supports,
-	}
-})
+  name: "till_payments_creditcard",
+  paymentMethodId: "till_payments_creditcard",
+  label: <Label />,
+  content: <Content />,
+  edit: <Content />,
+  canMakePayment: () => true,
+  ariaLabel: label ? label : "payment form",
+  supports: {
+    features: settings.supports,
+  },
+});
