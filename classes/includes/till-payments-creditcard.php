@@ -830,20 +830,36 @@ class WC_TillPayments_CreditCard extends WC_Payment_Gateway
     }
 
     /**
-     * Date that the cardholder opened the account with the 3DS Requestor. Format: YYYY-MM-DD
-     * Example: 2019-05-12
-     *
-     * @throws Exception
-     * @return string|null
-     */
-    private function cardholderAccountDate()
-    {
-        if (!$this->user) {
-            return null;
-        }
-
-        return $this->user->user_registered ? (new DateTime($this->user->user_registered))->format('Y-m-d') : null;
-    }
+	 * Date that the cardholder opened the account with the 3DS Requestor. Format: YYYY-MM-DD
+	 * Example: 2019-05-12
+	 *
+	 * @throws Exception
+	 * @return string|null
+	 */
+	private function cardholderAccountDate()
+	{
+	    if (!$this->user) {
+	        return null;
+	    }
+	
+	    $registered = $this->user->user_registered ?? null;
+	
+	    try {
+	        if ($registered) {
+	            $date = new DateTime($registered);
+	            // Validate formatted date
+	            $formatted = $date->format('Y-m-d');
+	            if ($formatted !== false && preg_match('/^\d{4}-\d{2}-\d{2}$/', $formatted)) {
+	                return $formatted;
+	            }
+	        }
+	    } catch (\Exception $e) {
+	        // fall through to fallback
+	    }
+	
+	    // fallback to cardholderAccountLastChange() if invalid
+	    return $this->cardholderAccountLastChange();
+	}
 
     /**
      * 3ds:cardholderAccountLastChange
