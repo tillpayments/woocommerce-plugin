@@ -38,8 +38,8 @@ use Psr\Log\LogLevel;
  */
 class Client {
 
-    const VERSION = '1.10.4';
-    
+    const VERSION = '1.10.5';
+
     /**
      * The default url points to the Gateway
      */
@@ -324,7 +324,7 @@ class Client {
      * @throws RateLimitException
      */
     protected function sendRequest($xml, $url) {
-        
+
         $httpResponse = $this->signAndSendXml($xml, $this->apiKey, $this->sharedSecret, $url);
 
         if ($httpResponse->getErrorCode() || $httpResponse->getErrorMessage()) {
@@ -373,10 +373,10 @@ class Client {
      * @throws TimeoutException
      */
     protected function sendJsonApiRequest($dataArray, $path) {
-        
+
         $url = self::$gatewayUrl.$path;
         $body = json_encode($dataArray);
-        
+
         $httpResponse = $this->signAndSendJson($body, $url, $this->username, $this->password, $this->apiKey, $this->sharedSecret);
 
         if ($httpResponse->getErrorCode() || $httpResponse->getErrorMessage()) {
@@ -456,7 +456,7 @@ class Client {
      */
     public function signAndSendJson($jsonBody, $url, $username, $password, $apiKey, $sharedSecret) {
         $url = str_replace('[API_KEY]', $apiKey, $url);
-        
+
         $this->log(LogLevel::DEBUG, "POST $url ",
             array(
                 'url' => $url,

@@ -7,7 +7,7 @@ Tested up to Wordpress: 6.4\
 Requires Woocommerce: 3.6.0\
 Tested up to Woocommerce: 8.5\
 Requires PHP: 7.2.5\
-Stable tag: 1.10.4
+Stable tag: 1.10.5
 
 ## Description
 
@@ -28,8 +28,8 @@ Please refer to https://tillpayments.com/ for merchant sign-up and more info.
 
 Download **tillpayments.zip** from our [latest releases](https://github.com/tillpayments/woocommerce-plugin/releases/latest)
 
-1. Upload the plugin files to the `/wp-content/plugins/tillpayments` directory, or install the plugin through the WordPress plugins screen directly.  
-   ***If uploaded via Wordpress please ensure the plugin is placed into the path above / named accordingly***
+1. Upload the plugin files to the `/wp-content/plugins/tillpayments` directory, or install the plugin through the WordPress plugins screen directly.
+   **_If uploaded via Wordpress please ensure the plugin is placed into the path above / named accordingly_**
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 ## Plugin Activation
